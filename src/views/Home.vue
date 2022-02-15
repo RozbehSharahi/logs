@@ -1,19 +1,19 @@
 <template>
   <div>
-    <database-picker v-if="!database" @update:database="updateDatabase" />
+    <the-database-picker v-if="!database" @update:database="updateDatabase" />
     <div v-else>
-      <logs />
+      <the-logs />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import DatabasePicker from "@/components/DatabasePicker.vue";
-import Logs from "@/components/Logs.vue";
+import TheDatabasePicker from "@/components/TheDatabasePicker.vue";
+import TheLogs from "@/components/TheLogs.vue";
 
 export default defineComponent({
-  components: { Logs, DatabasePicker },
+  components: { TheLogs, TheDatabasePicker },
 
   setup() {
     const database = ref<FileSystem.Handle>();
@@ -29,3 +29,8 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss" scoped>
+.the-database-picker {
+  max-width: 500px;
+}
+</style>

@@ -1,16 +1,17 @@
 <template>
   <div class="logs">
     <div>
-      <button @click="addLog">Add a new log</button>
+      <the-button label="Add" @click="addLog" />
     </div>
-    Here the list
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
 import { modalService } from "@/modals/modal-service";
+import TheButton from "@/components/TheButton.vue";
 
 export default defineComponent({
+  components: { TheButton },
   setup() {
     const services = reactive({
       modalService,
@@ -18,9 +19,16 @@ export default defineComponent({
 
     return {
       async addLog() {
-        services.modalService.open((await import("./LogForm.vue")).default, {
-          text: "Fuck yeah",
-        });
+        console.log("addlog");
+        services.modalService.open(
+          (await import("./TheLogForm.vue")).default,
+          {},
+          {
+            submit() {
+              alert("yeah2");
+            },
+          }
+        );
       },
     };
   },

@@ -1,7 +1,7 @@
 <template>
-  <div class="card">
-    <div class="card-title" v-if="title">{{ title }}</div>
-    <div class="car-content">
+  <div class="the-card">
+    <div class="the-card-title" v-if="title">{{ title }}</div>
+    <div class="the-card-content">
       <slot />
     </div>
   </div>
@@ -17,12 +17,19 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-.card {
-  padding: 20px;
+.the-card {
+  padding: 0;
   border: 1px solid black;
 
-  .card-title {
-    font-size: 1.5em;
+  &-title {
+    padding: 1em;
+    font-size: 1.2em;
+    background: black;
+    color: #fff;
+  }
+
+  &-content {
+    padding: 2em;
   }
 }
 </style>

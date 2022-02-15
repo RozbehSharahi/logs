@@ -1,5 +1,5 @@
 <template>
-  <div class="database-picker">
+  <div class="the-database-picker">
     <card title="Choose">
       <p>You have 2 options: Pick an existing database or create a new one.</p>
       <div class="mt3">
@@ -11,13 +11,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 import { fileSystem } from "@/file-system/file-system.ts";
-import Card from "@/components/Card.vue";
-import Knob from "@/components/Knob.vue";
+import Card from "@/components/TheCard.vue";
+import Knob from "@/components/TheButton.vue";
 
 export default defineComponent({
   components: { Knob, Card },
+  props: {
+    reload: {
+      type: Boolean,
+    },
+  },
   setup(props, { emit }) {
     const types = [
       {
@@ -26,13 +31,22 @@ export default defineComponent({
       },
     ];
 
+    onMounted(async () => {
+      const lastDatabase = await fileSystem.fromStore("last-database");
+      emit("update:database", lastDatabase);
+    });
+
     return {
       createDatabase: async function () {
-        emit("update:database", await fileSystem.createFile({ types }));
+        let handle = await fileSystem.createFile({ types });
+        await fileSystem.store("last-database", handle);
+        emit("update:database", handle);
       },
 
       pickDatabase: async function () {
-        emit("update:database", await fileSystem.pickFile({ types }));
+        let handle = await fileSystem.pickFile({ types });
+        await fileSystem.store("last-database", handle);
+        emit("update:database", handle);
       },
     };
   },
