@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted } from "vue";
-import { fileSystem } from "@/file-system/file-system.ts";
+import { service } from "@/file-system/service.ts";
 import Card from "@/components/TheCard.vue";
 import Knob from "@/components/TheButton.vue";
 
@@ -32,20 +32,20 @@ export default defineComponent({
     ];
 
     onMounted(async () => {
-      const lastDatabase = await fileSystem.fromStore("last-database");
+      const lastDatabase = await service.fromStore("last-database");
       emit("update:database", lastDatabase);
     });
 
     return {
       createDatabase: async function () {
-        let handle = await fileSystem.createFile({ types });
-        await fileSystem.store("last-database", handle);
+        let handle = await service.createFile({ types });
+        await service.store("last-database", handle);
         emit("update:database", handle);
       },
 
       pickDatabase: async function () {
-        let handle = await fileSystem.pickFile({ types });
-        await fileSystem.store("last-database", handle);
+        let handle = await service.pickFile({ types });
+        await service.store("last-database", handle);
         emit("update:database", handle);
       },
     };

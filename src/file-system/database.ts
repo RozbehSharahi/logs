@@ -15,7 +15,7 @@ class Database extends Dexie {
   }
 }
 
-export const fileSystemDatabase = new (class FileSystemDatabase {
+export const database = new (class FileSystemDatabase {
   private database: Database;
   constructor() {
     this.database = new Database();
