@@ -2,7 +2,14 @@
   <div class="the-database-picker">
     <card title="Choose">
       <p>You have 2 options: Pick an existing database or create a new one.</p>
-      <div class="mt3">
+      <div v-if="state.lastDatabase" class="mt-10">
+        <knob
+          label="Pick last database"
+          type="primary"
+          @click="pickLastDatabase"
+        />
+      </div>
+      <div class="mt-10">
         <knob label="Pick database" @click="pickDatabase" />
         <knob label="Create database" @click="createDatabase" />
       </div>
@@ -11,10 +18,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
-import { service } from "@/file-system/service.ts";
+import { defineComponent, onMounted, reactive } from "vue";
+import { fileSystemService } from "@/file-system/service.ts";
 import Card from "@/components/TheCard.vue";
 import Knob from "@/components/TheButton.vue";
+import { FileHandle } from "@/file-system/model/file-handle";
 
 export default defineComponent({
   components: { Knob, Card },
@@ -24,6 +32,10 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
+    const state = reactive({
+      lastDatabase: null as FileHandle | null,
+    });
+
     const types = [
       {
         description: "Database",
@@ -32,21 +44,25 @@ export default defineComponent({
     ];
 
     onMounted(async () => {
-      const lastDatabase = await service.fromStore("last-database");
-      emit("update:database", lastDatabase);
+      state.lastDatabase = await fileSystemService.fromStore("last-database");
     });
 
     return {
+      state,
       createDatabase: async function () {
-        let handle = await service.createFile({ types });
-        await service.store("last-database", handle);
+        let handle = await fileSystemService.createFile({ types });
+        await fileSystemService.store("last-database", handle);
         emit("update:database", handle);
       },
 
       pickDatabase: async function () {
-        let handle = await service.pickFile({ types });
-        await service.store("last-database", handle);
+        let handle = await fileSystemService.pickFile({ types });
+        await fileSystemService.store("last-database", handle);
         emit("update:database", handle);
+      },
+
+      pickLastDatabase: async function () {
+        emit("update:database", state.lastDatabase);
       },
     };
   },

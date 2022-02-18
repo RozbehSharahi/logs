@@ -1,7 +1,7 @@
 import { database } from "./database";
 import { FileHandle } from "./model/file-handle";
 
-export const service = new (class FileSystemService {
+export const fileSystemService = new (class FileSystemService {
   async pickFile(options?: FileSystem.OpenFile.Options): Promise<FileHandle> {
     const [file] = await window.showOpenFilePicker(options);
     if (!file) throw new Error("No file picked");

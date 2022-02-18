@@ -1,5 +1,5 @@
 <template>
-  <button class="the-button">
+  <button class="the-button" :class="`${type} ${size}`">
     {{ label }}
   </button>
 </template>
@@ -9,6 +9,14 @@ export default defineComponent({
   props: {
     label: {
       type: String,
+    },
+    type: {
+      type: String,
+      default: "default",
+    },
+    size: {
+      type: String,
+      default: "",
     },
   },
 });
@@ -21,9 +29,19 @@ export default defineComponent({
   border-radius: 5px;
   background: transparentize(#000, 0.98);
 
+  &.primary {
+    background: green;
+    color: #fff;
+    border: 2px solid darken(green, 5);
+  }
+
   &:hover {
     background: #000;
     color: #fff;
+  }
+
+  &.sm {
+    font-size: 0.6em;
   }
 }
 </style>

@@ -1,30 +1,38 @@
 <template>
   <div>
-    <the-database-picker v-if="!database" @update:database="updateDatabase" />
-    <div v-else>
-      <the-logs />
-    </div>
+    <the-database-picker
+      v-if="!services.database.isReady()"
+      @update:database="updateDatabase"
+    />
+    <the-logs v-else />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, reactive } from "vue";
+import { database } from "@/database/database";
 import TheDatabasePicker from "@/components/TheDatabasePicker.vue";
 import TheLogs from "@/components/TheLogs.vue";
+import { FileHandle } from "@/file-system/model/file-handle";
 
 export default defineComponent({
   components: { TheLogs, TheDatabasePicker },
 
   setup() {
-    const database = ref<FileSystem.Handle>();
+    const state = reactive({
+      started: false,
+    });
 
-    const updateDatabase = (d: FileSystem.Handle) => {
-      database.value = d;
-    };
+    const services = reactive({
+      database,
+    });
 
     return {
-      database,
-      updateDatabase,
+      state,
+      services,
+      async updateDatabase(database: FileHandle) {
+        await services.database.setDatabaseFile(database);
+      },
     };
   },
 });

@@ -1,17 +1,27 @@
 <template>
   <div class="the-input">
     <label class="label">{{ label }}</label>
-    <input type="text" />
+    <input :value="modelValue" type="text" @input="handleInput" />
   </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
   props: {
+    modelValue: {
+      type: String,
+    },
     label: {
       type: String,
       required: true,
     },
+  },
+  setup(props, { emit }) {
+    return {
+      handleInput(e: Event) {
+        emit("update:modelValue", (e.target as HTMLInputElement).value);
+      },
+    };
   },
 });
 </script>

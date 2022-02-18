@@ -7,19 +7,22 @@ type Component = any;
 
 interface IModal {
   component: Component;
-  properties: Map;
-  listeners: Map;
+  properties?: Map;
+  listeners?: Map;
 }
 
 export const modalService = new (class ModalService {
   private modals: IModal[] = [];
 
-  open(component: Component, properties: Map = {}, listeners: Map = {}) {
-    this.modals.push({
-      component: shallowRef(component),
-      listeners,
-      properties,
-    });
+  open(modal: IModal) {
+    modal.component = shallowRef(modal.component.default);
+    modal.listeners = modal.listeners || {};
+    modal.listeners.close = () => this.pop();
+    this.modals.push(modal);
+  }
+
+  pop() {
+    this.modals.pop();
   }
 
   getModals(): IModal[] {

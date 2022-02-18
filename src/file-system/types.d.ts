@@ -2,6 +2,8 @@ declare namespace FileSystem {
   declare interface Handle {
     getFile(): Promise<File>;
     createWritable(): Promise<WritableHandle>;
+    requestPermission(options: { mode: string }): Promise<string>;
+    queryPermission(options: { mode: string }): Promise<string>;
   }
 
   declare interface WritableHandle {
