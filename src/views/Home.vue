@@ -1,38 +1,31 @@
 <template>
   <div>
-    <the-database-picker
-      v-if="!services.database.isReady()"
-      @update:database="updateDatabase"
+    <the-status-bar
+      v-if="services.fileStore.isDatabaseRegistered()"
+      class="mb-30"
     />
+    <the-database-picker v-if="!services.fileStore.isDatabaseRegistered()" />
     <the-logs v-else />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
-import { database } from "@/database/database";
 import TheDatabasePicker from "@/components/TheDatabasePicker.vue";
 import TheLogs from "@/components/TheLogs.vue";
-import { FileHandle } from "@/file-system/model/file-handle";
+import { fileStore } from "@rozbehsharahi/file-store/file-store";
+import TheStatusBar from "@/components/TheStatusBar.vue";
 
 export default defineComponent({
-  components: { TheLogs, TheDatabasePicker },
+  components: { TheStatusBar, TheLogs, TheDatabasePicker },
 
   setup() {
-    const state = reactive({
-      started: false,
-    });
-
     const services = reactive({
-      database,
+      fileStore,
     });
 
     return {
-      state,
       services,
-      async updateDatabase(database: FileHandle) {
-        await services.database.setDatabaseFile(database);
-      },
     };
   },
 });

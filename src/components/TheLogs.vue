@@ -1,59 +1,45 @@
 <template>
   <div class="logs">
-    <the-grid class="mb-30">
-      <div class="w-1/2">
-        <the-button label="Add" @click="addLog" />
-      </div>
-      <div class="w-1/2 text-right">
-        <the-button
-          label="Save"
-          v-if="state.isDirty"
-          type="primary"
-          @click="save"
-        />
-      </div>
-    </the-grid>
+    <div class="mb-10">
+      <the-button label="Add" @click="addLog" />
+    </div>
     <div class="list">
       <div
-        v-for="log in services.database.logs"
-        :key="log.getContent()"
+        v-for="log in services.database.all('log')"
+        :key="log.identifier"
         class="log"
         @click="editLog(log)"
       >
         <the-button label="Edit" class="float-right" size="sm" />
-        <span>{{ log.getContent() }}</span>
+        <span>{{ log.content }}</span>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, onUnmounted, onMounted } from "vue";
+import { defineComponent, onMounted, onUnmounted, reactive } from "vue";
 import { modalService } from "@/modals/modal-service";
-import { database } from "@/database/database";
 import TheButton from "@/components/TheButton.vue";
 import { Log } from "@/model/log";
-import TheGrid from "@/components/TheGrid.vue";
+import { fileStore } from "@rozbehsharahi/file-store";
+import { saveShortcut } from "@rozbehsharahi/save-shortcut";
 
 export default defineComponent({
-  components: { TheGrid, TheButton },
+  components: { TheButton },
   setup() {
     const services = reactive({
       modalService,
-      database,
+      database: fileStore.getDatabase(),
     });
 
     const state = reactive({
-      isDirty: false,
       interval: null as number | null,
     });
 
-    const save = () => {
-      services.database.save();
-      state.isDirty = false;
-    };
+    const save = () => services.database.saveAll();
 
-    onMounted(() => (state.interval = setInterval(() => save(), 500)));
-    onUnmounted(() => state.interval && clearInterval(state.interval));
+    onMounted(() => saveShortcut.register("the-logs", () => save()));
+    onUnmounted(() => saveShortcut.unregister("the-logs"));
 
     return {
       state,
@@ -67,8 +53,7 @@ export default defineComponent({
           },
           listeners: {
             commit(editedLog: Log) {
-              state.isDirty = true;
-              log.setContent(editedLog.getContent());
+              console.log(editedLog);
 
               services.modalService.pop();
             },
@@ -79,9 +64,10 @@ export default defineComponent({
         services.modalService.open({
           component: await import("./TheLogForm.vue"),
           listeners: {
-            commit(log: Log) {
-              state.isDirty = true;
-              services.database.logs.push(log);
+            async commit(log: Log) {
+              await services.database.create("log", {
+                content: log.getContent(),
+              });
               services.modalService.pop();
             },
           },

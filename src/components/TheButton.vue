@@ -26,13 +26,18 @@ export default defineComponent({
   padding: 0.5em 1em;
   border: 2px solid black;
   margin-right: 1em;
-  border-radius: 5px;
-  background: transparentize(#000, 0.98);
+  border-radius: 0.5em;
+  background: #fff;
+  color: #000;
 
   &.primary {
     background: green;
     color: #fff;
     border: 2px solid darken(green, 5);
+  }
+
+  &.danger {
+    background: red;
   }
 
   &:hover {
@@ -42,6 +47,7 @@ export default defineComponent({
 
   &.sm {
     font-size: 0.6em;
+    border-width: 1px;
   }
 }
 </style>

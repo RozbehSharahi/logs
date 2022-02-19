@@ -1025,6 +1025,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@rozbehsharahi/file-store@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@rozbehsharahi/file-store/-/file-store-1.0.1.tgz#4776563654e616181e6b24e8618fbf2f5ab1010b"
+  integrity sha512-OvZmmop+VitvuyPRUrgUfM51PMjI7MkmzJZ4Asf8hPMP3qerGr7ZsDzksk9j8wBRskAlKbSpLqU4EDb/LundZg==
+
 "@soda/friendly-errors-webpack-plugin@^1.7.1":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@soda/friendly-errors-webpack-plugin/-/friendly-errors-webpack-plugin-1.8.1.tgz#4d4fbb1108993aaa362116247c3d18188a2c6c85"
