@@ -1,7 +1,7 @@
 <template>
   <div class="logs">
     <div class="mb-10">
-      <the-button label="Add" @click="methods.addLog" />
+      <the-button label="Add (a)" @click="methods.addLog" />
     </div>
     <div class="list">
       <the-grid :key="logs.length">
@@ -85,27 +85,28 @@ export default defineComponent({
 
     onMounted(() => {
       shortPacker.push([
-        {
+        new ShortCut({
           label: "Save",
-          shortCut: ShortCut.ctrlS(),
-          method: () => methods.save(),
-        },
-        {
+          key: "s",
+          action: () => methods.save(),
+        }),
+        new ShortCut({
           label: "Add",
-          shortCut: new ShortCut({ key: "a" }),
-          method: () => methods.addLog(),
-        },
-        {
-          label: "Delete last",
-          shortCut: ShortCut.delete(),
-          method: () => {
+          key: "a",
+          action: () => methods.addLog(),
+        }),
+        new ShortCut({
+          label: "Delete Last",
+          key: "Delete",
+          action: () => {
             const lastLog = services.database.all("log").slice().reverse()[0];
             if (!lastLog) return;
             services.database.delete("log", lastLog);
           },
-        },
+        }),
       ]);
     });
+
     onUnmounted(() => {
       shortPacker.pop();
     });

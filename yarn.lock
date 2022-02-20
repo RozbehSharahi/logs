@@ -1030,10 +1030,10 @@
   resolved "https://registry.yarnpkg.com/@rozbehsharahi/file-store/-/file-store-1.0.1.tgz#4776563654e616181e6b24e8618fbf2f5ab1010b"
   integrity sha512-OvZmmop+VitvuyPRUrgUfM51PMjI7MkmzJZ4Asf8hPMP3qerGr7ZsDzksk9j8wBRskAlKbSpLqU4EDb/LundZg==
 
-"@rozbehsharahi/shortcuts@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@rozbehsharahi/shortcuts/-/shortcuts-1.0.1.tgz#5e586662b494ac960d1cebb6d0f39a0e79ce4746"
-  integrity sha512-miMB5BcrVdLlqcjZo4Q4lufSeivySvJrs2ihT5ojMt/BTRz1r3GY1/E/dPzqn/DXOBEEfjMIPW15hlkbQgRm6g==
+"@rozbehsharahi/shortcuts@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@rozbehsharahi/shortcuts/-/shortcuts-2.0.1.tgz#4f4849ef26f64cd93478b2443d5bbf52a169d276"
+  integrity sha512-/+MVGiE/W0xjAmFO0TQdh57X1jDRILW35Y+IXiBP6ewZL6YLE3Jx9rjA9w8fcJWJv2+iCNCjZhtl92/azefxrA==
 
 "@soda/friendly-errors-webpack-plugin@^1.7.1":
   version "1.8.1"

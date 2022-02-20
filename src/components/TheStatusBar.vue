@@ -10,7 +10,7 @@
     />
     <span>Todos</span>
     <span v-if="services.database.isDirty()">
-      (Please save your changes: <strong>ctrl+s</strong>)
+      (Please save your changes (s))
     </span>
   </div>
 </template>

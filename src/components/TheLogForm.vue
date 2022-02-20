@@ -42,16 +42,11 @@ export default defineComponent({
 
     onMounted(() => {
       shortPacker.push([
-        {
+        new ShortCut({
           label: "Commit",
-          shortCut: ShortCut.ctrlS(),
-          method: () => methods.commit(),
-        },
-        {
-          label: "Cancel",
-          shortCut: ShortCut.escape(),
-          method: () => emit("close"),
-        },
+          key: "Escape",
+          action: () => emit("close"),
+        }),
       ]);
     });
 
