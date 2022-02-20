@@ -39,7 +39,7 @@ import { modalService } from "@/modals/modal-service";
 import TheButton from "@/components/TheButton.vue";
 import { Log } from "@/model/log";
 import { fileStore } from "@rozbehsharahi/file-store";
-import { shortCuts } from "@rozbehsharahi/shortcuts";
+import { shortCutter } from "@rozbehsharahi/shortcuts";
 import TheCard from "@/components/TheCard.vue";
 import TheGrid from "@/components/TheGrid.vue";
 
@@ -84,12 +84,12 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      shortCuts.register("the-logs-save", "ctrl+s", () => methods.save());
-      shortCuts.register("the-logs-create", "ctrl+q", () => methods.addLog());
+      shortCutter.register("the-logs-save", "ctrl+s", () => methods.save());
+      shortCutter.register("the-logs-create", "ctrl+q", () => methods.addLog());
     });
     onUnmounted(() => {
-      shortCuts.unregister("the-logs-save");
-      shortCuts.unregister("the-logs-create");
+      shortCutter.unregister("the-logs-save");
+      shortCutter.unregister("the-logs-create");
     });
 
     return {
