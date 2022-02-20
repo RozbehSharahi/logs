@@ -20,16 +20,18 @@ export default defineComponent({
 .the-card {
   padding: 0;
   border: 1px solid black;
+  border-radius: 1em;
+  overflow: hidden;
 
   &-title {
-    padding: 1em;
+    padding: 0.7em 1em;
     font-size: 1.2em;
     background: black;
     color: #fff;
   }
 
   &-content {
-    padding: 2em;
+    padding: 1em;
   }
 }
 </style>

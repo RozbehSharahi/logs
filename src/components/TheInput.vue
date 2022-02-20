@@ -1,11 +1,16 @@
 <template>
   <div class="the-input">
     <label class="label">{{ label }}</label>
-    <input :value="modelValue" type="text" @input="handleInput" />
+    <input
+      ref="inputReference"
+      :value="modelValue"
+      type="text"
+      @input="handleInput"
+    />
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 export default defineComponent({
   props: {
     modelValue: {
@@ -15,9 +20,21 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    autoFocus: {
+      type: Boolean,
+      required: false,
+    },
   },
   setup(props, { emit }) {
+    const inputReference = ref<HTMLInputElement>();
+
+    onMounted(() => {
+      const input = inputReference.value;
+      if (props.autoFocus && input) input.focus();
+    });
+
     return {
+      inputReference,
       handleInput(e: Event) {
         emit("update:modelValue", (e.target as HTMLInputElement).value);
       },

@@ -1,20 +1,34 @@
-interface ILog {
-  content: string;
+import { Normalizer, Row } from "@rozbehsharahi/file-store/types";
+
+interface Data {
+  identifier?: number | null;
+  content?: string;
 }
 
 export class Log {
-  private content: string;
+  private readonly content: string;
+  private readonly identifier: number | null;
 
-  constructor(data: ILog) {
-    this.content = data.content;
+  constructor(data: Data) {
+    this.identifier = data.identifier || null;
+    this.content = data.content || "";
+  }
+
+  getIdentifier(): number | null {
+    return this.identifier;
   }
 
   getContent(): string {
     return this.content;
   }
 
-  setContent(content: string): this {
-    this.content = content;
-    return this;
+  static getNormalizer(): Normalizer {
+    return {
+      normalize: (log: Log) => ({
+        identifier: log.getIdentifier(),
+        content: log.getContent(),
+      }),
+      denormalize: (row: Row): Log => new Log(row),
+    };
   }
 }
