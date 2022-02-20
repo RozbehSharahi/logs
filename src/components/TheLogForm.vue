@@ -10,11 +10,12 @@
   </the-form>
 </template>
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent, onMounted, onUnmounted, reactive } from "vue";
 import TheForm from "@/components/TheForm.vue";
 import TheInput from "@/components/TheInput.vue";
 import TheButton from "@/components/TheButton.vue";
 import { Log } from "@/model/log";
+import { shortCuts } from "@rozbehsharahi/shortcuts";
 
 export default defineComponent({
   components: { TheButton, TheInput, TheForm },
@@ -32,6 +33,15 @@ export default defineComponent({
         content: props.log.getContent(),
       },
     });
+
+    onMounted(() => {
+      shortCuts.register("the-log-form-escape", "Escape", () => emit("close"));
+    });
+
+    onUnmounted(() => {
+      shortCuts.unregister("the-log-form-escape");
+    });
+
     return {
       state,
       commit() {

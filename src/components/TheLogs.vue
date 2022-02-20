@@ -1,7 +1,7 @@
 <template>
   <div class="logs">
     <div class="mb-10">
-      <the-button label="Add" @click="addLog" />
+      <the-button label="Add" @click="methods.addLog" />
     </div>
     <div class="list">
       <the-grid :key="logs.length">
@@ -11,13 +11,13 @@
               label="Delete"
               class="float-right"
               size="sm"
-              @click="deleteLog(log)"
+              @click="methods.deleteLog(log)"
             />
             <the-button
               label="Edit"
               class="float-right"
               size="sm"
-              @click="editLog(log)"
+              @click="methods.editLog(log)"
             />
             <span>{{ log.getIdentifier() }} | </span>
             <strong>{{ log.getContent() }}</strong>
@@ -39,7 +39,7 @@ import { modalService } from "@/modals/modal-service";
 import TheButton from "@/components/TheButton.vue";
 import { Log } from "@/model/log";
 import { fileStore } from "@rozbehsharahi/file-store";
-import { saveShortcut } from "@rozbehsharahi/save-shortcut";
+import { shortCuts } from "@rozbehsharahi/shortcuts";
 import TheCard from "@/components/TheCard.vue";
 import TheGrid from "@/components/TheGrid.vue";
 
@@ -51,15 +51,10 @@ export default defineComponent({
       database: fileStore.getDatabase(),
     });
 
-    const save = () => services.database.saveAll();
-
-    onMounted(() => saveShortcut.register("the-logs", () => save()));
-    onUnmounted(() => saveShortcut.unregister("the-logs"));
-
-    return {
-      services,
-      logs: computed((): Log[] => services.database.all("log")),
-      save,
+    const methods = {
+      async save() {
+        await services.database.saveAll();
+      },
       async addLog() {
         services.modalService.open({
           component: await import("./TheLogForm.vue"),
@@ -86,6 +81,21 @@ export default defineComponent({
       async deleteLog(log: Log) {
         await services.database.delete("log", log);
       },
+    };
+
+    onMounted(() => {
+      shortCuts.register("the-logs-save", "ctrl+s", () => methods.save());
+      shortCuts.register("the-logs-create", "ctrl+q", () => methods.addLog());
+    });
+    onUnmounted(() => {
+      shortCuts.unregister("the-logs-save");
+      shortCuts.unregister("the-logs-create");
+    });
+
+    return {
+      services,
+      methods,
+      logs: computed((): Log[] => services.database.all("log")),
     };
   },
 });
