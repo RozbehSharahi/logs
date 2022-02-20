@@ -39,7 +39,7 @@ import { modalService } from "@/modals/modal-service";
 import TheButton from "@/components/TheButton.vue";
 import { Log } from "@/model/log";
 import { fileStore } from "@rozbehsharahi/file-store";
-import { shortCutter } from "@rozbehsharahi/shortcuts";
+import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
 import TheCard from "@/components/TheCard.vue";
 import TheGrid from "@/components/TheGrid.vue";
 
@@ -84,12 +84,30 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      shortCutter.register("the-logs-save", "ctrl+s", () => methods.save());
-      shortCutter.register("the-logs-create", "ctrl+q", () => methods.addLog());
+      shortPacker.push([
+        {
+          label: "Save",
+          shortCut: ShortCut.ctrlS(),
+          method: () => methods.save(),
+        },
+        {
+          label: "Add",
+          shortCut: new ShortCut({ key: "a" }),
+          method: () => methods.addLog(),
+        },
+        {
+          label: "Delete last",
+          shortCut: ShortCut.delete(),
+          method: () => {
+            const lastLog = services.database.all("log").slice().reverse()[0];
+            if (!lastLog) return;
+            services.database.delete("log", lastLog);
+          },
+        },
+      ]);
     });
     onUnmounted(() => {
-      shortCutter.unregister("the-logs-save");
-      shortCutter.unregister("the-logs-create");
+      shortPacker.pop();
     });
 
     return {

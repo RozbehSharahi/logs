@@ -1,5 +1,5 @@
 <template>
-  <the-form class="bg-white" @submit.prevent="commit">
+  <the-form class="bg-white" @submit.prevent="methods.commit">
     <the-input
       :auto-focus="true"
       label="Content"
@@ -15,7 +15,7 @@ import TheForm from "@/components/TheForm.vue";
 import TheInput from "@/components/TheInput.vue";
 import TheButton from "@/components/TheButton.vue";
 import { Log } from "@/model/log";
-import { shortCutter } from "@rozbehsharahi/shortcuts";
+import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
 
 export default defineComponent({
   components: { TheButton, TheInput, TheForm },
@@ -34,19 +34,34 @@ export default defineComponent({
       },
     });
 
+    const methods = {
+      commit() {
+        emit("commit", new Log(state.draft));
+      },
+    };
+
     onMounted(() => {
-      shortCutter.register("log-form-escape", "Escape", () => emit("close"));
+      shortPacker.push([
+        {
+          label: "Commit",
+          shortCut: ShortCut.ctrlS(),
+          method: () => methods.commit(),
+        },
+        {
+          label: "Cancel",
+          shortCut: ShortCut.escape(),
+          method: () => emit("close"),
+        },
+      ]);
     });
 
     onUnmounted(() => {
-      shortCutter.unregister("log-form-escape");
+      shortPacker.pop();
     });
 
     return {
       state,
-      commit() {
-        emit("commit", new Log(state.draft));
-      },
+      methods,
     };
   },
 });
