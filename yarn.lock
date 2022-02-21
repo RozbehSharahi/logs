@@ -1031,9 +1031,9 @@
   integrity sha512-OvZmmop+VitvuyPRUrgUfM51PMjI7MkmzJZ4Asf8hPMP3qerGr7ZsDzksk9j8wBRskAlKbSpLqU4EDb/LundZg==
 
 "@rozbehsharahi/shortcuts@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@rozbehsharahi/shortcuts/-/shortcuts-2.0.1.tgz#4f4849ef26f64cd93478b2443d5bbf52a169d276"
-  integrity sha512-/+MVGiE/W0xjAmFO0TQdh57X1jDRILW35Y+IXiBP6ewZL6YLE3Jx9rjA9w8fcJWJv2+iCNCjZhtl92/azefxrA==
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@rozbehsharahi/shortcuts/-/shortcuts-2.0.4.tgz#f9b7f2e59c744439e725d3e28035928c976b286e"
+  integrity sha512-Rjn0o81K+TxQ9NHuORGyCPOxlZlgvS3PkesIZMUDtpKDOaVYkCdnrNvFw1nwo/5BCoo1Q1O0eLZPemDfjedFuw==
 
 "@soda/friendly-errors-webpack-plugin@^1.7.1":
   version "1.8.1"
