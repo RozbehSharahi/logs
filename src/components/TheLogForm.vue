@@ -6,6 +6,7 @@
         label="Content"
         v-model="state.draft.content"
       />
+      <the-input label="Hours" v-model="state.draft.hours" />
       <the-button label="Commit" type="primary"></the-button>
       <the-button label="Cancel" @click.prevent="$emit('close')"></the-button>
     </the-form>
@@ -34,6 +35,7 @@ export default defineComponent({
       draft: {
         identifier: props.log.getIdentifier(),
         content: props.log.getContent(),
+        hours: props.log.getHours(),
       },
     });
 

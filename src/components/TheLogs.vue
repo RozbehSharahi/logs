@@ -4,26 +4,22 @@
       <the-button label="Add (a)" @click="methods.addLog" />
     </div>
     <div class="list">
-      <the-grid :key="logs.length">
-        <div v-for="log in logs" :key="log.getIdentifier()" class="log w-1/3">
-          <the-card :title="log.getIdentifier().toString()">
-            <the-button
-              label="Delete"
-              class="float-right"
-              size="sm"
-              @click="methods.deleteLog(log)"
-            />
-            <the-button
-              label="Edit"
-              class="float-right"
-              size="sm"
-              @click="methods.editLog(log)"
-            />
-            <span>{{ log.getIdentifier() }} | </span>
-            <strong>{{ log.getContent() }}</strong>
-          </the-card>
-        </div>
-      </the-grid>
+      <div v-for="log in logs" :key="log.getIdentifier()" class="log">
+        <the-button
+          label="Delete"
+          class="float-right"
+          size="sm"
+          @click="methods.deleteLog(log)"
+        />
+        <the-button
+          label="Edit"
+          class="float-right"
+          size="sm"
+          @click="methods.editLog(log)"
+        />
+        <span>{{ log.getHours() }}h </span>
+        <strong>{{ log.getContent() }}</strong>
+      </div>
     </div>
   </div>
 </template>
@@ -40,11 +36,9 @@ import TheButton from "@/components/TheButton.vue";
 import { Log } from "@/model/log";
 import { fileStore } from "@rozbehsharahi/file-store";
 import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
-import TheCard from "@/components/TheCard.vue";
-import TheGrid from "@/components/TheGrid.vue";
 
 export default defineComponent({
-  components: { TheGrid, TheCard, TheButton },
+  components: { TheButton },
   setup() {
     const services = reactive({
       modalService,
@@ -126,9 +120,11 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
+@import "src/assets/scss/variables";
 .logs {
-  .the-card {
-    height: 100%;
+  .log {
+    padding: 1em;
+    border-bottom: 1px solid $gray-very-light;
   }
 }
 </style>
