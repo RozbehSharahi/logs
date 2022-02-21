@@ -32,6 +32,6 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .the-database-picker {
-  max-width: 500px;
+  max-width: 600px;
 }
 </style>

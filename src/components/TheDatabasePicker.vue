@@ -1,12 +1,19 @@
 <template>
-  <div class="the-database-picker">
+  <div class="the-database-picker" v-if="!state.loading">
     <card title="Choose">
       <p>You have 2 options: Pick an existing database or create a new one.</p>
       <div class="mt-10">
         <the-button
-          :autoFocus="true"
+          v-if="state.isDatabaseStored"
+          label="Continue session"
+          @click="pickLastDatabase"
+          type="primary"
+          :auto-focus="true"
+        />
+        <the-button
           label="Pick database"
           @click="pickDatabase"
+          :auto-focus="!state.isDatabaseStored"
           type="primary"
         />
         <the-button label="Create database" @click="createDatabase" />
@@ -16,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent, onMounted, reactive } from "vue";
 import Card from "@/components/TheCard.vue";
 import TheButton from "@/components/TheButton.vue";
 import { fileStore } from "@rozbehsharahi/file-store/file-store";
@@ -33,13 +40,29 @@ export default defineComponent({
       fileStore,
     });
 
+    const state = reactive({
+      loading: true,
+      isDatabaseStored: false,
+    });
+
+    onMounted(async () => {
+      state.isDatabaseStored = await fileStore.isDatabaseStored();
+      state.loading = false;
+    });
+
     return {
+      state,
+
       createDatabase: async function () {
         await services.fileStore.createAndRegisterDatabase();
       },
 
       pickDatabase: async function () {
         await services.fileStore.pickAndRegisterDatabase();
+      },
+
+      pickLastDatabase: async function () {
+        await services.fileStore.pickFromSessionAndRegisterDatabase();
       },
     };
   },
