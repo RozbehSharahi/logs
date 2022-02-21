@@ -3,8 +3,13 @@
     <card title="Choose">
       <p>You have 2 options: Pick an existing database or create a new one.</p>
       <div class="mt-10">
-        <knob label="Pick database" @click="pickDatabase" type="primary" />
-        <knob label="Create database" @click="createDatabase" />
+        <the-button
+          :autoFocus="true"
+          label="Pick database"
+          @click="pickDatabase"
+          type="primary"
+        />
+        <the-button label="Create database" @click="createDatabase" />
       </div>
     </card>
   </div>
@@ -13,11 +18,11 @@
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
 import Card from "@/components/TheCard.vue";
-import Knob from "@/components/TheButton.vue";
+import TheButton from "@/components/TheButton.vue";
 import { fileStore } from "@rozbehsharahi/file-store/file-store";
 
 export default defineComponent({
-  components: { Knob, Card },
+  components: { TheButton, Card },
   props: {
     reload: {
       type: Boolean,

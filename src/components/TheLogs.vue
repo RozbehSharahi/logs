@@ -48,6 +48,7 @@ export default defineComponent({
   setup() {
     const services = reactive({
       modalService,
+      fileStore: fileStore,
       database: fileStore.getDatabase(),
     });
 
@@ -103,6 +104,11 @@ export default defineComponent({
             if (!lastLog) return;
             services.database.delete("log", lastLog);
           },
+        }),
+        new ShortCut({
+          label: "Logout",
+          key: "Escape",
+          action: () => services.fileStore.unregisterDatabase(),
         }),
       ]);
     });

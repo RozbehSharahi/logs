@@ -1,11 +1,15 @@
+@import "./variables";
+
 #app {
   font-family: monospace;
   background: #fff;
+  color: $gray-dark;
 }
 
 body {
   font-size: 14px;
+
   p {
-    margin-bottom: 1em;
+    margin-bottom: 2em;
   }
 }

@@ -32,18 +32,16 @@ export default defineComponent({
   left: 0;
   width: 100%;
   height: 100%;
-  background: transparentize(#fff, 0.4);
+  background: transparentize(#fff, 0.1);
 
   &-content {
     margin-top: 10em;
   }
 
   .modal {
-    border: 1px solid #000;
-    box-shadow: 5px 10px #888888;
     max-width: 600px;
     margin: 0 auto;
-    padding: 2em;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.05);
   }
 }
 </style>

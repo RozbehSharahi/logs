@@ -1,10 +1,10 @@
 <template>
-  <button class="the-button" :class="`${type} ${size}`">
+  <button ref="buttonReference" class="the-button" :class="`${type} ${size}`">
     {{ label }}
   </button>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 export default defineComponent({
   props: {
     label: {
@@ -18,31 +18,68 @@ export default defineComponent({
       type: String,
       default: "",
     },
+    autoFocus: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  setup(props) {
+    const buttonReference = ref<HTMLButtonElement | null>(null);
+
+    onMounted(() => {
+      const button = buttonReference.value;
+
+      if (props.autoFocus && button) {
+        button.focus();
+      }
+    });
+
+    return {
+      buttonReference,
+    };
   },
 });
 </script>
 <style lang="scss" scoped>
+@import "./src/assets/scss/variables";
 .the-button {
   padding: 0.5em 1em;
-  border: 2px solid black;
+  border-bottom: 2px solid $gray-dark;
   margin-right: 1em;
-  border-radius: 0.5em;
   background: #fff;
-  color: #000;
+  transition: background-color 0.5s;
 
   &.primary {
-    background: green;
-    color: #fff;
-    border: 2px solid darken(green, 5);
+    background: lighten($primary, 50);
+    border-bottom-color: $primary;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background: $primary;
+      color: #fff;
+    }
   }
 
   &.danger {
-    background: red;
+    background: lighten($danger, 60);
+    border-bottom-color: $danger;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background: $danger;
+      color: #fff;
+      outline: 0;
+    }
   }
 
-  &:hover {
-    background: #000;
-    color: #fff;
+  &:hover,
+  &:active,
+  &:focus {
+    background: $gray;
+    outline: 0;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
   }
 
   &.sm {
