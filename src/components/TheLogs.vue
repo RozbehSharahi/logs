@@ -123,26 +123,14 @@ export default defineComponent({
     onMounted(() => {
       shortPacker.push([
         new ShortCut({
-          label: "Save",
           key: "s",
           action: () => methods.save(),
         }),
         new ShortCut({
-          label: "Add",
           key: "a",
           action: () => methods.addLog(),
         }),
         new ShortCut({
-          label: "Delete Last",
-          key: "Delete",
-          action: () => {
-            const activeLog = state.activeLog as Log | null;
-            methods.selectNextItem();
-            if (activeLog) methods.deleteLog(activeLog);
-          },
-        }),
-        new ShortCut({
-          label: "Logout",
           key: "Escape",
           action: () => services.fileStore.unregisterDatabase(),
         }),
@@ -153,6 +141,14 @@ export default defineComponent({
         new ShortCut({
           key: "ArrowUp",
           action: () => methods.selectPreviousItem(),
+        }),
+        new ShortCut({
+          key: "Delete",
+          action: () => {
+            const activeLog = state.activeLog as Log | null;
+            methods.selectNextItem();
+            if (activeLog) methods.deleteLog(activeLog);
+          },
         }),
         new ShortCut({
           key: "Enter",
