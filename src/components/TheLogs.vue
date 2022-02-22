@@ -4,7 +4,14 @@
       <the-button label="Add (a)" @click="methods.addLog" />
     </div>
     <div class="list">
-      <div v-for="log in logs" :key="log.getIdentifier()" class="log">
+      <div
+        v-for="log in logs"
+        :key="log.getIdentifier()"
+        class="log"
+        :class="{
+          active: state.activeLog?.getIdentifier() === log.getIdentifier(),
+        }"
+      >
         <the-button
           label="Delete"
           class="float-right"
@@ -40,6 +47,10 @@ import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
 export default defineComponent({
   components: { TheButton },
   setup() {
+    const state = reactive({
+      activeLog: null as Log | null,
+    });
+
     const services = reactive({
       modalService,
       fileStore: fileStore,
@@ -76,6 +87,37 @@ export default defineComponent({
       async deleteLog(log: Log) {
         await services.database.delete("log", log);
       },
+      async selectNextItem(reverse = false) {
+        const logs = (
+          !reverse
+            ? services.database.all("log")
+            : services.database.all("log").reverse()
+        ) as Log[];
+        const logsCount = logs.length;
+        if (!logs.length) return;
+
+        const activeLog = state.activeLog;
+
+        if (!activeLog) {
+          state.activeLog = logs[0];
+          return;
+        }
+
+        const index = logs.findIndex(
+          (possibleLog) =>
+            possibleLog.getIdentifier() === activeLog.getIdentifier()
+        );
+
+        if (logsCount - 1 === index) {
+          state.activeLog = logs[0];
+          return;
+        }
+
+        return (state.activeLog = logs[index + 1]);
+      },
+      selectPreviousItem() {
+        return methods.selectNextItem(true);
+      },
     };
 
     onMounted(() => {
@@ -94,15 +136,32 @@ export default defineComponent({
           label: "Delete Last",
           key: "Delete",
           action: () => {
-            const lastLog = services.database.all("log").slice().reverse()[0];
-            if (!lastLog) return;
-            services.database.delete("log", lastLog);
+            const activeLog = state.activeLog as Log | null;
+            methods.selectNextItem();
+            if (activeLog) methods.deleteLog(activeLog);
           },
         }),
         new ShortCut({
           label: "Logout",
           key: "Escape",
           action: () => services.fileStore.unregisterDatabase(),
+        }),
+        new ShortCut({
+          key: "ArrowDown",
+          action: () => methods.selectNextItem(),
+        }),
+        new ShortCut({
+          key: "ArrowUp",
+          action: () => methods.selectPreviousItem(),
+        }),
+        new ShortCut({
+          key: "Enter",
+          action: () => {
+            const activeLog = state.activeLog as Log | null;
+            if (activeLog) {
+              methods.editLog(activeLog);
+            }
+          },
         }),
       ]);
     });
@@ -112,6 +171,7 @@ export default defineComponent({
     });
 
     return {
+      state,
       services,
       methods,
       logs: computed((): Log[] => services.database.all("log")),
@@ -125,6 +185,10 @@ export default defineComponent({
   .log {
     padding: 1em;
     border-bottom: 1px solid $gray-very-light;
+
+    &.active {
+      background-color: transparentize($primary, 0.9);
+    }
   }
 }
 </style>
