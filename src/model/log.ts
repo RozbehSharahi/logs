@@ -53,7 +53,7 @@ export class Log {
         date: log.getDate(),
       }),
       denormalize: (row: Row): Log => {
-        row.date = new Date(row.date);
+        row.date = row.date ? new Date(row.date) : new Date();
         return new Log(row);
       },
     };
