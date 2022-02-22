@@ -23,10 +23,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive } from "vue";
+import { defineComponent, onMounted, onUnmounted, reactive } from "vue";
 import Card from "@/components/TheCard.vue";
 import TheButton from "@/components/TheButton.vue";
 import { fileStore } from "@rozbehsharahi/file-store/file-store";
+import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
+import { findNextTabElement, findPreviousTabElement } from "@/utils/utils";
 
 export default defineComponent({
   components: { TheButton, Card },
@@ -48,6 +50,21 @@ export default defineComponent({
     onMounted(async () => {
       state.isDatabaseStored = await fileStore.isDatabaseStored();
       state.loading = false;
+
+      shortPacker.push([
+        new ShortCut({
+          key: "ArrowLeft",
+          action: () => findPreviousTabElement().focus(),
+        }),
+        new ShortCut({
+          key: "ArrowRight",
+          action: () => findNextTabElement().focus(),
+        }),
+      ]);
+    });
+
+    onUnmounted(() => {
+      shortPacker.pop();
     });
 
     return {
