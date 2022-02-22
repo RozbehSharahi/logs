@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "build-git-hub-page": "vue-cli-service build && cp -R dist git-hub-page"
   },
   "dependencies": {
     "@rozbehsharahi/file-store": "^1.1.0",
