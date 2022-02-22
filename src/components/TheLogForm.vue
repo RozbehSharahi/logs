@@ -7,6 +7,7 @@
         v-model="state.draft.content"
       />
       <the-input type="number" label="Hours" v-model="state.draft.hours" />
+      <the-input label="date" type="date" v-model="state.draft.date" />
       <the-button label="Commit" type="primary"></the-button>
       <the-button label="Cancel" @click.prevent="$emit('close')"></the-button>
     </the-form>
@@ -27,7 +28,7 @@ export default defineComponent({
     log: {
       type: Log,
       required: false,
-      default: new Log({}),
+      default: new Log(),
     },
   },
   setup(props, { emit }) {
@@ -36,12 +37,16 @@ export default defineComponent({
         identifier: props.log.getIdentifier(),
         content: props.log.getContent(),
         hours: props.log.getHours(),
+        date: props.log.getDateString(),
       },
     });
 
     const methods = {
       commit() {
-        emit("commit", new Log(state.draft));
+        const data = Object.assign({}, state.draft, {
+          date: new Date(state.draft.date),
+        });
+        emit("commit", new Log(data));
       },
     };
 

@@ -58,10 +58,10 @@ export default defineComponent({
     });
 
     const methods = {
-      async save() {
+      save: async () => {
         await services.database.saveAll();
       },
-      async addLog() {
+      addLog: async () => {
         services.modalService.open({
           component: await import("./TheLogForm.vue"),
           listeners: {
@@ -72,7 +72,7 @@ export default defineComponent({
           },
         });
       },
-      async editLog(log: Log) {
+      editLog: async (log: Log) => {
         services.modalService.open({
           component: await import("./TheLogForm.vue"),
           properties: { log },
@@ -84,10 +84,21 @@ export default defineComponent({
           },
         });
       },
-      async deleteLog(log: Log) {
+      deleteLog: async (log: Log) => {
         await services.database.delete("log", log);
       },
-      async selectNextItem(reverse = false) {
+      editActiveLog() {
+        const activeLog = state.activeLog as Log | null;
+        if (activeLog) {
+          methods.editLog(activeLog);
+        }
+      },
+      deleteActiveLog() {
+        const activeLog = state.activeLog as Log | null;
+        methods.selectNextItem();
+        if (activeLog) methods.deleteLog(activeLog);
+      },
+      selectNextItem(reverse = false) {
         const logs = (
           !reverse
             ? services.database.all("log")
@@ -144,20 +155,15 @@ export default defineComponent({
         }),
         new ShortCut({
           key: "Delete",
-          action: () => {
-            const activeLog = state.activeLog as Log | null;
-            methods.selectNextItem();
-            if (activeLog) methods.deleteLog(activeLog);
-          },
+          action: () => methods.deleteActiveLog(),
+        }),
+        new ShortCut({
+          key: "e",
+          action: () => methods.editActiveLog(),
         }),
         new ShortCut({
           key: "Enter",
-          action: () => {
-            const activeLog = state.activeLog as Log | null;
-            if (activeLog) {
-              methods.editLog(activeLog);
-            }
-          },
+          action: () => methods.editActiveLog(),
         }),
       ]);
     });
