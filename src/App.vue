@@ -7,8 +7,9 @@
 
 <script>
 import Modals from "@/modals/component/Modals.vue";
-import { Log } from "@/model/log";
 import { fileStore } from "@rozbehsharahi/file-store";
+import { Log } from "@/model/log";
+import { Tag } from "@/model/tag";
 
 export default {
   components: { Modals },
@@ -20,7 +21,9 @@ export default {
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   mounted() {
-    fileStore.registerSerializer("log", Log.getNormalizer());
+    fileStore
+      .registerSerializer("log", Log.getNormalizer())
+      .registerSerializer("tag", Tag.getNormalizer());
   },
 };
 </script>

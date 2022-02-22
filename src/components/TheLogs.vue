@@ -1,7 +1,11 @@
 <template>
   <div class="logs">
     <div class="mb-10">
-      <the-button label="Add (a)" @click="methods.addLog" />
+      <the-button
+        type="primary"
+        label="Add a log (a)"
+        @click="methods.addLog"
+      />
     </div>
     <div class="list">
       <div
