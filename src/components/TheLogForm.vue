@@ -6,7 +6,7 @@
         label="Content"
         v-model="state.draft.content"
       />
-      <the-input label="Hours" v-model="state.draft.hours" />
+      <the-input type="number" label="Hours" v-model="state.draft.hours" />
       <the-button label="Commit" type="primary"></the-button>
       <the-button label="Cancel" @click.prevent="$emit('close')"></the-button>
     </the-form>

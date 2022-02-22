@@ -2,9 +2,9 @@
   <div class="the-input">
     <label class="label">{{ label }}</label>
     <input
+      :type="type"
       ref="inputReference"
       :value="modelValue"
-      type="text"
       @input="handleInput"
     />
   </div>
@@ -14,7 +14,7 @@ import { defineComponent, onMounted, ref } from "vue";
 export default defineComponent({
   props: {
     modelValue: {
-      type: String,
+      type: [String, Number],
     },
     label: {
       type: String,
@@ -23,6 +23,10 @@ export default defineComponent({
     autoFocus: {
       type: Boolean,
       required: false,
+    },
+    type: {
+      type: String,
+      default: "text",
     },
   },
   setup(props, { emit }) {
