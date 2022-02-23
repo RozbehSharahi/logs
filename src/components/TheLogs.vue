@@ -30,6 +30,11 @@
         />
         <span>{{ log.getHours() }}h </span>
         <strong>{{ log.getContent() }}</strong>
+        <the-tag-list
+          class="inline-block ml-20 mt-10 text-0.6"
+          style="position: relative; top: -0.5em"
+          :tags="log.getTags()"
+        />
       </div>
     </div>
   </div>
@@ -47,9 +52,10 @@ import TheButton from "@/components/TheButton.vue";
 import { Log } from "@/model/log";
 import { fileStore } from "@rozbehsharahi/file-store";
 import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
+import TheTagList from "@/components/TheTagList.vue";
 
 export default defineComponent({
-  components: { TheButton },
+  components: { TheTagList, TheButton },
   setup() {
     const state = reactive({
       activeLog: null as Log | null,

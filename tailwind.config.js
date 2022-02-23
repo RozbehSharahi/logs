@@ -2,6 +2,9 @@ module.exports = {
   purge: ["./public/**/*.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    fontSize: {
+      0.6: "0.6em",
+    },
     spacing: {
       1: "0.1em",
       2: "0.2em",
@@ -13,7 +16,7 @@ module.exports = {
       8: "0.8em",
       9: "0.9em",
       10: "1em",
-      // ...
+      20: "2em",
       30: "3em",
     },
     extend: {},
