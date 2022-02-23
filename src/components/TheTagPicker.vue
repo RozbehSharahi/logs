@@ -62,8 +62,8 @@ export default defineComponent({
     padding: 0.2em 1em;
     margin-right: 0.5em;
     margin-bottom: 0.5em;
+    cursor: pointer;
 
-    &:hover,
     &.active {
       background: $primary;
       color: #fff;

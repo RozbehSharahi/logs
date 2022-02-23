@@ -79,11 +79,10 @@ export default defineComponent({
   &:focus {
     background: $gray;
     outline: 0;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
   }
 
   &.sm {
-    font-size: 0.6em;
+    font-size: 0.8em;
     border-width: 1px;
   }
 }

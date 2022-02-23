@@ -1,42 +1,46 @@
 <template>
   <div class="logs">
-    <div class="mb-10">
+    <div class="mb-30">
       <the-button
         type="primary"
         label="Add a log (a)"
         @click="methods.addLog"
       />
     </div>
-    <div class="list">
-      <div
-        v-for="log in logs"
-        :key="log.getIdentifier()"
-        class="log"
-        :class="{
-          active: state.activeLog?.getIdentifier() === log.getIdentifier(),
-        }"
-      >
-        <the-button
-          label="Delete"
-          class="float-right"
-          size="sm"
-          @click="methods.deleteLog(log)"
-        />
-        <the-button
-          label="Edit"
-          class="float-right"
-          size="sm"
-          @click="methods.editLog(log)"
-        />
-        <span>{{ log.getHours() }}h </span>
-        <strong>{{ log.getContent() }}</strong>
-        <the-tag-list
-          class="inline-block ml-20 mt-10 text-0.6"
-          style="position: relative; top: -0.5em"
-          :tags="log.getTags()"
-        />
+    <the-up-down-navigation
+      class="list"
+      :selector="'.log .button-edit'"
+      :enabled="!services.modalService.getModals().length"
+    >
+      <div v-for="log in logs" :key="log.getIdentifier()" class="log">
+        <the-grid>
+          <div class="w-3/4">
+            <div>
+              <span><the-date :date="log.getDate()" /> / </span>
+              <strong>{{ log.getContent() }}</strong>
+              <span> / {{ log.getHours() }}h </span>
+            </div>
+            <div class="text-0.8">
+              <the-tag-list class="inline-block mt-10" :tags="log.getTags()" />
+            </div>
+          </div>
+          <div class="w-1/4 text-right">
+            <the-button
+              label="Delete"
+              size="sm"
+              @click="methods.deleteLog(log)"
+            />
+            <the-button
+              label="Edit"
+              class="button-edit"
+              size="sm"
+              type="primary"
+              @click="methods.editLog(log)"
+            />
+          </div>
+        </the-grid>
       </div>
-    </div>
+    </the-up-down-navigation>
   </div>
 </template>
 <script lang="ts">
@@ -53,14 +57,13 @@ import { Log } from "@/model/log";
 import { fileStore } from "@rozbehsharahi/file-store";
 import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
 import TheTagList from "@/components/TheTagList.vue";
+import TheGrid from "@/components/TheGrid.vue";
+import TheUpDownNavigation from "@/components/TheUpDownNavigation.vue";
+import TheDate from "@/components/TheDate.vue";
 
 export default defineComponent({
-  components: { TheTagList, TheButton },
+  components: { TheDate, TheUpDownNavigation, TheGrid, TheTagList, TheButton },
   setup() {
-    const state = reactive({
-      activeLog: null as Log | null,
-    });
-
     const services = reactive({
       modalService,
       fileStore: fileStore,
@@ -97,48 +100,6 @@ export default defineComponent({
       deleteLog: async (log: Log) => {
         await services.database.delete("log", log);
       },
-      editActiveLog() {
-        const activeLog = state.activeLog as Log | null;
-        if (activeLog) {
-          methods.editLog(activeLog);
-        }
-      },
-      deleteActiveLog() {
-        const activeLog = state.activeLog as Log | null;
-        methods.selectNextItem();
-        if (activeLog) methods.deleteLog(activeLog);
-      },
-      selectNextItem(reverse = false) {
-        const logs = (
-          !reverse
-            ? services.database.all("log")
-            : services.database.all("log").reverse()
-        ) as Log[];
-        const logsCount = logs.length;
-        if (!logs.length) return;
-
-        const activeLog = state.activeLog;
-
-        if (!activeLog) {
-          state.activeLog = logs[0];
-          return;
-        }
-
-        const index = logs.findIndex(
-          (possibleLog) =>
-            possibleLog.getIdentifier() === activeLog.getIdentifier()
-        );
-
-        if (logsCount - 1 === index) {
-          state.activeLog = logs[0];
-          return;
-        }
-
-        return (state.activeLog = logs[index + 1]);
-      },
-      selectPreviousItem() {
-        return methods.selectNextItem(true);
-      },
     };
 
     onMounted(() => {
@@ -155,26 +116,6 @@ export default defineComponent({
           key: "Escape",
           action: () => services.fileStore.unregisterDatabase(),
         }),
-        new ShortCut({
-          key: "ArrowDown",
-          action: () => methods.selectNextItem(),
-        }),
-        new ShortCut({
-          key: "ArrowUp",
-          action: () => methods.selectPreviousItem(),
-        }),
-        new ShortCut({
-          key: "Delete",
-          action: () => methods.deleteActiveLog(),
-        }),
-        new ShortCut({
-          key: "e",
-          action: () => methods.editActiveLog(),
-        }),
-        new ShortCut({
-          key: "Enter",
-          action: () => methods.editActiveLog(),
-        }),
       ]);
     });
 
@@ -183,7 +124,6 @@ export default defineComponent({
     });
 
     return {
-      state,
       services,
       methods,
       logs: computed((): Log[] => services.database.all("log")),
@@ -198,8 +138,8 @@ export default defineComponent({
     padding: 1em;
     border-bottom: 1px solid $gray-very-light;
 
-    &.active {
-      background-color: transparentize($primary, 0.9);
+    &:nth-child(odd) {
+      background-color: $gray-lightest;
     }
   }
 }

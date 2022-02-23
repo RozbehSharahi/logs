@@ -1,5 +1,5 @@
 <template>
-  <div class="tag">
+  <div class="the-tag">
     {{ label }}
   </div>
 </template>
@@ -19,10 +19,9 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 @import "src/assets/scss/variables";
-.tag {
-  display: inline-block;
+.the-tag {
+  display: inline;
   padding: 0.2em 1em;
-  margin-right: 1em;
   border: 1px solid $gray-dark;
   opacity: 0.6;
 }

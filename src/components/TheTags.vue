@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mb-10">
+    <div class="mb-30">
       <the-button label="Add tag" @click="methods.addTag" />
     </div>
     <div v-for="tag in tags" :key="tag.getLabel()" class="tag">

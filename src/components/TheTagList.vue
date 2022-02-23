@@ -20,4 +20,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .the-tag-list {
 }
+.the-tag {
+  margin-right: 0.5em;
+}
 </style>

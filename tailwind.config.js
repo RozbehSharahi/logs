@@ -4,6 +4,8 @@ module.exports = {
   theme: {
     fontSize: {
       0.6: "0.6em",
+      0.8: "0.8em",
+      1.2: "1.2em",
     },
     spacing: {
       1: "0.1em",
