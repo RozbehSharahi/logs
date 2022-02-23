@@ -5,6 +5,7 @@ export interface IData {
   content?: string;
   hours?: number;
   date?: Date;
+  tags?: string[];
 }
 
 export class Log {
@@ -12,12 +13,14 @@ export class Log {
   private readonly identifier: number | null;
   private readonly hours: number;
   private readonly date: Date;
+  private readonly tags: string[];
 
   constructor(data: IData = {}) {
     this.identifier = data.identifier || null;
     this.content = data.content || "";
     this.hours = data.hours || 1;
     this.date = data.date || new Date();
+    this.tags = data.tags || [];
   }
 
   getIdentifier(): number | null {
@@ -36,6 +39,10 @@ export class Log {
     return this.date;
   }
 
+  getTags(): string[] {
+    return this.tags;
+  }
+
   getDateString(): string {
     const date = this.date;
     const year = date.getFullYear();
@@ -51,9 +58,11 @@ export class Log {
         content: log.getContent(),
         hours: log.getHours(),
         date: log.getDate(),
+        tags: log.getTags(),
       }),
       denormalize: (row: Row): Log => {
         row.date = row.date ? new Date(row.date) : new Date();
+        row.tags = row.tags || [];
         return new Log(row);
       },
     };

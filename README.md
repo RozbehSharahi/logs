@@ -1,5 +1,10 @@
 # logs
 
+## Know issues
+
+- should use index for arrow navigation !
+- create a nice arrow navigation list component
+
 ## Project setup
 ```
 yarn install

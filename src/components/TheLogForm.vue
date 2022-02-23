@@ -3,11 +3,13 @@
     <the-form class="bg-white" @submit.prevent="methods.commit">
       <the-input
         :auto-focus="true"
+        :required="true"
         label="Content"
         v-model="state.draft.content"
       />
       <the-input type="number" label="Hours" v-model="state.draft.hours" />
       <the-input label="date" type="date" v-model="state.draft.date" />
+      <the-tag-picker label="tags" v-model="state.draft.tags" />
       <the-button label="Commit" type="primary"></the-button>
       <the-button label="Cancel" @click.prevent="$emit('close')"></the-button>
     </the-form>
@@ -21,9 +23,10 @@ import TheButton from "@/components/TheButton.vue";
 import { Log } from "@/model/log";
 import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
 import TheCard from "@/components/TheCard.vue";
+import TheTagPicker from "@/components/TheTagPicker.vue";
 
 export default defineComponent({
-  components: { TheCard, TheButton, TheInput, TheForm },
+  components: { TheTagPicker, TheCard, TheButton, TheInput, TheForm },
   props: {
     log: {
       type: Log,
@@ -38,6 +41,7 @@ export default defineComponent({
         content: props.log.getContent(),
         hours: props.log.getHours(),
         date: props.log.getDateString(),
+        tags: props.log.getTags(),
       },
     });
 

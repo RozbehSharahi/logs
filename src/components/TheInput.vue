@@ -5,6 +5,7 @@
       :type="type"
       ref="inputReference"
       :value="modelValue"
+      :required="!required"
       @input="handleInput"
     />
   </div>
@@ -23,6 +24,10 @@ export default defineComponent({
     autoFocus: {
       type: Boolean,
       required: false,
+    },
+    required: {
+      type: Boolean,
+      default: false,
     },
     type: {
       type: String,

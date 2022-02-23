@@ -60,5 +60,6 @@ export default defineComponent({
   background-color: transparentize($primary, 0.9);
   margin-right: 0.5em;
   margin-bottom: 0.5em;
+  font-size: 0.8em;
 }
 </style>
