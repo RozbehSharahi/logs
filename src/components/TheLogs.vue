@@ -54,32 +54,34 @@ import {
 import { modalService } from "@/modals/modal-service";
 import TheButton from "@/components/TheButton.vue";
 import { Log } from "@/model/log";
-import { fileStore } from "@rozbehsharahi/file-store";
 import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
 import TheTagList from "@/components/TheTagList.vue";
 import TheGrid from "@/components/TheGrid.vue";
 import TheUpDownNavigation from "@/components/TheUpDownNavigation.vue";
 import TheDate from "@/components/TheDate.vue";
+import { useFileStore } from "@/composables/file-store";
+import { useDatabase } from "@/composables/database";
 
 export default defineComponent({
   components: { TheDate, TheUpDownNavigation, TheGrid, TheTagList, TheButton },
   setup() {
+    const { database, unregisterDatabase } = useFileStore();
+    const { saveAll, create, update, all } = useDatabase(database.value);
+
     const services = reactive({
       modalService,
-      fileStore: fileStore,
-      database: fileStore.getDatabase(),
     });
 
     const methods = {
       save: async () => {
-        await services.database.saveAll();
+        await saveAll();
       },
       addLog: async () => {
         services.modalService.open({
           component: await import("./TheLogForm.vue"),
           listeners: {
             async commit(log: Log) {
-              await services.database.create("log", log);
+              await create("log", log);
               services.modalService.pop();
             },
           },
@@ -91,14 +93,14 @@ export default defineComponent({
           properties: { log },
           listeners: {
             async commit(editedLog: Log) {
-              await services.database.update("log", editedLog);
+              await update("log", editedLog);
               services.modalService.pop();
             },
           },
         });
       },
       deleteLog: async (log: Log) => {
-        await services.database.delete("log", log);
+        await database.value.delete("log", log);
       },
     };
 
@@ -114,7 +116,7 @@ export default defineComponent({
         }),
         new ShortCut({
           key: "Escape",
-          action: () => services.fileStore.unregisterDatabase(),
+          action: () => unregisterDatabase(),
         }),
       ]);
     });
@@ -126,7 +128,7 @@ export default defineComponent({
     return {
       services,
       methods,
-      logs: computed((): Log[] => services.database.all("log")),
+      logs: computed((): Log[] => all("log")),
     };
   },
 });

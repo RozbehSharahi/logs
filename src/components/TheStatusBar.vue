@@ -1,9 +1,9 @@
 <template>
-  <div class="the-status-bar" :class="{ dirty: services.database.isDirty() }">
+  <div class="the-status-bar" :class="{ dirty: isDirty }">
     <the-grid>
       <div class="w-3/4">
         <div class="mt-4">
-          <span v-if="!services.database.isDirty()"> ✓ All todos saved </span>
+          <span v-if="!isDirty"> ✓ All todos saved </span>
           <span v-else> Please save your changes </span>
         </div>
       </div>
@@ -11,37 +11,32 @@
         <the-button
           label="Logout (Escape)"
           size="sm"
-          @click="services.fileStore.unregisterDatabase()"
+          @click="unregisterDatabase()"
         />
         <the-button
-          v-if="services.database.isDirty()"
+          v-if="isDirty"
           size="sm"
           type="danger"
           label="Save (s)"
-          @click="save"
+          @click="saveAll"
         />
       </div>
     </the-grid>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
-import { fileStore } from "@rozbehsharahi/file-store";
+import { defineComponent } from "vue";
 import TheButton from "@/components/TheButton.vue";
 import TheGrid from "@/components/TheGrid.vue";
+import { useFileStore } from "@/composables/file-store";
+import { useDatabase } from "@/composables/database";
 
 export default defineComponent({
   components: { TheGrid, TheButton },
   setup() {
-    const services = reactive({
-      fileStore,
-      database: fileStore.getDatabase(),
-    });
     return {
-      services,
-      async save() {
-        await services.database.saveAll();
-      },
+      ...useFileStore(),
+      ...useDatabase(useFileStore().database.value),
     };
   },
 });

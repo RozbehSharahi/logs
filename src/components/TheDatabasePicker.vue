@@ -1,19 +1,19 @@
 <template>
-  <div class="the-database-picker" v-if="!state.loading">
+  <div class="the-database-picker" v-if="isReady">
     <card title="Choose">
       <p>You have 2 options: Pick an existing database or create a new one.</p>
       <div class="mt-10">
         <the-button
-          v-if="state.isDatabaseStored"
+          v-if="isLastDatabaseStored"
           label="Continue session"
-          @click="pickLastDatabase"
+          @click="pickDatabaseFromSession"
           type="primary"
           :auto-focus="true"
         />
         <the-button
           label="Pick database"
           @click="pickDatabase"
-          :auto-focus="!state.isDatabaseStored"
+          :auto-focus="!isLastDatabaseStored"
           type="primary"
         />
         <the-button label="Create database" @click="createDatabase" />
@@ -23,12 +23,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, reactive } from "vue";
+import { defineComponent, onMounted, onUnmounted } from "vue";
 import Card from "@/components/TheCard.vue";
 import TheButton from "@/components/TheButton.vue";
-import { fileStore } from "@rozbehsharahi/file-store/file-store";
 import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
 import { findNextTabElement, findPreviousTabElement } from "@/utils/utils";
+import { useFileStore } from "@/composables/file-store";
 
 export default defineComponent({
   components: { TheButton, Card },
@@ -38,19 +38,9 @@ export default defineComponent({
     },
   },
   setup() {
-    const services = reactive({
-      fileStore,
-    });
-
-    const state = reactive({
-      loading: true,
-      isDatabaseStored: false,
-    });
+    const fileStore = useFileStore();
 
     onMounted(async () => {
-      state.isDatabaseStored = await fileStore.isDatabaseStored();
-      state.loading = false;
-
       shortPacker.push([
         new ShortCut({
           key: "ArrowLeft",
@@ -68,19 +58,7 @@ export default defineComponent({
     });
 
     return {
-      state,
-
-      createDatabase: async function () {
-        await services.fileStore.createAndRegisterDatabase();
-      },
-
-      pickDatabase: async function () {
-        await services.fileStore.pickAndRegisterDatabase();
-      },
-
-      pickLastDatabase: async function () {
-        await services.fileStore.pickFromSessionAndRegisterDatabase();
-      },
+      ...fileStore,
     };
   },
 });

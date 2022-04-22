@@ -1,43 +1,28 @@
 <template>
   <div>
-    <the-status-bar
-      v-if="services.fileStore.isDatabaseRegistered()"
-      class="mb-30"
-    />
-    <the-database-picker v-if="!services.fileStore.isDatabaseRegistered()" />
-    <div v-else>
-      <the-grid>
-        <div class="w-3/4">
-          <the-logs />
-        </div>
-        <div class="w-1/4">
-          <the-tags />
-        </div>
-      </the-grid>
-    </div>
+    <the-database-picker />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent } from "vue";
+import { useRouter } from "vue-router";
+import { useFileStore } from "@/composables/file-store";
+import { watchImmediate } from "@/utils/vue-utils";
 import TheDatabasePicker from "@/components/TheDatabasePicker.vue";
-import TheLogs from "@/components/TheLogs.vue";
-import { fileStore } from "@rozbehsharahi/file-store/file-store";
-import TheStatusBar from "@/components/TheStatusBar.vue";
-import TheGrid from "@/components/TheGrid.vue";
-import TheTags from "@/components/TheTags.vue";
 
 export default defineComponent({
-  components: { TheTags, TheGrid, TheStatusBar, TheLogs, TheDatabasePicker },
+  components: { TheDatabasePicker },
 
   setup() {
-    const services = reactive({
-      fileStore,
+    const { isDatabaseRegistered } = useFileStore();
+    const router = useRouter();
+
+    watchImmediate(isDatabaseRegistered, (v: boolean) => {
+      if (v) router.push("logs");
     });
 
-    return {
-      services,
-    };
+    return {};
   },
 });
 </script>
