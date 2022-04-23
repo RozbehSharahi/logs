@@ -29,7 +29,7 @@ export default defineComponent({
 
     const methods = {
       isActive(tag: Tag) {
-        return (props.modelValue || []).includes(tag.getLabel());
+        return (props.modelValue || []).includes(tag.getIdentifier());
       },
       toggleTag(tag: Tag) {
         if (!props.modelValue) return;
@@ -37,8 +37,8 @@ export default defineComponent({
         emit(
           "update:modelValue",
           methods.isActive(tag)
-            ? props.modelValue.filter((v) => v !== tag.getLabel())
-            : [...props.modelValue, tag.getLabel()]
+            ? props.modelValue.filter((v) => v !== tag.getIdentifier())
+            : [...props.modelValue, tag.getIdentifier()]
         );
       },
     };

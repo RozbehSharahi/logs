@@ -1,6 +1,6 @@
 <template>
   <div class="the-tag-list">
-    <the-tag v-for="tag in tags" :key="tag" :label="tag" />
+    <the-tag v-for="tag in tags" :key="tag" :label="tag || 'xxx'" />
   </div>
 </template>
 <script>

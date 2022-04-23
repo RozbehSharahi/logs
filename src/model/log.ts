@@ -5,7 +5,7 @@ export interface IData {
   content?: string;
   hours?: number;
   date?: Date;
-  tags?: string[];
+  tags?: number[];
 }
 
 export class Log {
@@ -13,7 +13,7 @@ export class Log {
   private readonly identifier: number | null;
   private readonly hours: number;
   private readonly date: Date;
-  private readonly tags: string[];
+  private readonly tags: number[];
 
   constructor(data: IData = {}) {
     this.identifier = data.identifier || null;
@@ -39,7 +39,7 @@ export class Log {
     return this.date;
   }
 
-  getTags(): string[] {
+  getTags(): number[] {
     return this.tags;
   }
 

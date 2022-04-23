@@ -21,7 +21,10 @@
               <span> / {{ log.getHours() }}h </span>
             </div>
             <div class="text-0.8">
-              <the-tag-list class="inline-block mt-10" :tags="log.getTags()" />
+              <the-tag-list
+                class="inline-block mt-10"
+                :tags="methods.getTagsByIds(log.getTags())"
+              />
             </div>
           </div>
           <div class="w-1/4 text-right">
@@ -61,6 +64,7 @@ import TheUpDownNavigation from "@/components/TheUpDownNavigation.vue";
 import TheDate from "@/components/TheDate.vue";
 import { useFileStore } from "@/composables/file-store";
 import { useDatabase } from "@/composables/database";
+import { Tag } from "@/model/tag";
 
 export default defineComponent({
   components: { TheDate, TheUpDownNavigation, TheGrid, TheTagList, TheButton },
@@ -102,22 +106,19 @@ export default defineComponent({
       deleteLog: async (log: Log) => {
         await database.value.delete("log", log);
       },
+      getTagsByIds(ids: number[]) {
+        return ids.map((id) => {
+          const tag: Tag | null = database.value.get("tag", id);
+          return tag ? tag.getLabel() : null;
+        });
+      },
     };
 
     onMounted(() => {
       shortPacker.push([
-        new ShortCut({
-          key: "s",
-          action: () => methods.save(),
-        }),
-        new ShortCut({
-          key: "a",
-          action: () => methods.addLog(),
-        }),
-        new ShortCut({
-          key: "Escape",
-          action: () => unregisterDatabase(),
-        }),
+        new ShortCut({ key: "s", action: () => methods.save() }),
+        new ShortCut({ key: "a", action: () => methods.addLog() }),
+        new ShortCut({ key: "Escape", action: () => unregisterDatabase() }),
       ]);
     });
 
