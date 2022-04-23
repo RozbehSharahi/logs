@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "yarn build:github-page": "PUBLIC_PATH=/logs/ vue-cli-service build"
+    "build:github-page": "PUBLIC_PATH=/logs/ vue-cli-service build"
   },
   "dependencies": {
     "@rozbehsharahi/file-store": "^1.1.0",
