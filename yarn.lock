@@ -1026,9 +1026,9 @@
     fastq "^1.6.0"
 
 "@rozbehsharahi/file-store@^1.1.0":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@rozbehsharahi/file-store/-/file-store-1.1.1.tgz#7838ea628881de6d2d8ede65a342c634daf993f3"
-  integrity sha512-82TCBBXTffZDU3xMOZtsFBcQfSNzQBiQIuQWJmHpvONBFtE4zwAMSFySsmESHvEXNa5vBm/hkjBeimyB65/BQQ==
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@rozbehsharahi/file-store/-/file-store-1.1.2.tgz#e9e76f2ace229209056425d8cc4d4ef9aa0b98ef"
+  integrity sha512-anK5kp3rN2wFNPF66Q5bVZxx8N9DVYCvgeVLLcNmcLd0FlQnin2uDDhfUIHKvqJ+ygUYNZA+bL6RzFrY62sgKA==
   dependencies:
     dexie "^3.2.0"
 
