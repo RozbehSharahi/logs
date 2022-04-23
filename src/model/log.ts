@@ -1,4 +1,6 @@
 import { Normalizer, Row } from "@rozbehsharahi/file-store/types";
+import { Tag } from "@/model/tag";
+import { useRelations } from "@/composables/relations";
 
 export interface IData {
   identifier?: number | null;
@@ -41,6 +43,12 @@ export class Log {
 
   getTags(): number[] {
     return this.tags;
+  }
+
+  getRelations(): { getTags: () => Tag[] } {
+    return {
+      getTags: () => useRelations().getLogTags(this),
+    };
   }
 
   getDateString(): string {

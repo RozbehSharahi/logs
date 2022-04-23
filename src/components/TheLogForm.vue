@@ -37,11 +37,11 @@ export default defineComponent({
   setup(props, { emit }) {
     const state = reactive({
       draft: {
-        identifier: props.log.getIdentifier(),
-        content: props.log.getContent(),
-        hours: props.log.getHours(),
-        date: props.log.getDateString(),
-        tags: props.log.getTags(),
+        identifier: (props.log as Log).getIdentifier(),
+        content: (props.log as Log).getContent(),
+        hours: (props.log as Log).getHours(),
+        date: (props.log as Log).getDateString(),
+        tags: (props.log as Log).getTags(),
       },
     });
 

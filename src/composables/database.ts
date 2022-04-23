@@ -7,6 +7,7 @@ interface IComposableDatabase {
   isDirty: ComputedRef<boolean>;
   saveAll: () => Promise<void>;
   all: (table: string) => Entity[];
+  get: (table: string, identifier: number) => Entity;
   create: (table: string, row: Row) => Database;
   update: (table: string, row: Entity) => Database;
 }
@@ -21,6 +22,9 @@ export function useDatabase(database: Database): IComposableDatabase {
     isDirty,
     all: (table: string) => {
       return db.value.all(table);
+    },
+    get: (table: string, identifier: number): Entity => {
+      return db.value.get(table, identifier);
     },
     create: (table: string, row: Row) => {
       return db.value.create(table, row);
