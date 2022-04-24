@@ -1,3 +1,4 @@
+<!--suppress HtmlUnknownTag -->
 <template>
   <div class="container mt-30">
     <router-view />
@@ -31,6 +32,18 @@ export default {
       new ShortCut({
         key: "Escape",
         action: () => element(".short-cutter-escape")?.click(),
+      }),
+      new ShortCut({
+        key: "1",
+        action: () => element(".short-cutter-1")?.click(),
+      }),
+      new ShortCut({
+        key: "2",
+        action: () => element(".short-cutter-2")?.click(),
+      }),
+      new ShortCut({
+        key: "3",
+        action: () => element(".short-cutter-3")?.click(),
       }),
     ]);
 

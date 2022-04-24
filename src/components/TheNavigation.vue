@@ -2,18 +2,18 @@
   <div class="the-navigation">
     <ul>
       <li>
-        <router-link :to="'logs'" class="node">
-          <strong>•</strong> Logs
+        <router-link :to="'logs'" class="node short-cutter-1">
+          <strong>•</strong> Logs (1)
         </router-link>
       </li>
       <li>
-        <router-link :to="'tags'" class="node">
-          <strong>•</strong> Tags
+        <router-link :to="'tags'" class="node short-cutter-2">
+          <strong>•</strong> Tags (2)
         </router-link>
       </li>
       <li>
-        <router-link :to="'statistics'" class="node">
-          <strong>•</strong> Statistics
+        <router-link :to="'statistics'" class="node short-cutter-3">
+          <strong>•</strong> Statistics (3)
         </router-link>
       </li>
     </ul>
