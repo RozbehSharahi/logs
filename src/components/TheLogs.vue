@@ -17,7 +17,7 @@
         <the-grid>
           <div class="w-3/4">
             <div>
-              <span><the-date :date="log.getDate()" /> / </span>
+              <span><the-date :date="log.getDate()" /> </span>
               <strong>{{ log.getContent() }}</strong>
               <span> / {{ log.getHours() }}h </span>
             </div>
@@ -34,11 +34,11 @@
             </div>
           </div>
           <div class="w-1/4 text-right">
-            <the-button label="Delete" size="sm" @click="deleteLog(log)" />
+            <the-button label="Delete" size="xs" @click="deleteLog(log)" />
             <the-button
               label="Edit"
               class="button-edit"
-              size="sm"
+              size="xs"
               type="primary"
               @click="editLog(log)"
             />
@@ -113,7 +113,7 @@ export default defineComponent({
 @import "src/assets/scss/variables";
 .logs {
   .log {
-    padding: 1em;
+    padding: 0.5em;
     border-bottom: 1px solid $gray-very-light;
 
     &:nth-child(odd) {

@@ -22,9 +22,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "src/assets/scss/variables";
 .the-date {
-  background-color: $primary;
-  color: #fff;
-  padding: 0 1em;
-  border-radius: 1em;
+  border-right: 1px solid $primary;
+  margin-right: 0.5em;
+  padding-right: 0.5em;
 }
 </style>

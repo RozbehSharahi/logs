@@ -85,5 +85,10 @@ export default defineComponent({
     font-size: 0.8em;
     border-width: 1px;
   }
+
+  &.xs {
+    font-size: 0.6em;
+    border-width: 1px;
+  }
 }
 </style>

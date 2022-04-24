@@ -45,7 +45,9 @@ export default defineComponent({
     return {
       inputReference,
       handleInput(e: Event) {
-        emit("update:modelValue", (e.target as HTMLInputElement).value);
+        let value: number | string = (e.target as HTMLInputElement).value;
+        if (props.type === "number") value = parseInt(value);
+        emit("update:modelValue", value);
       },
     };
   },
