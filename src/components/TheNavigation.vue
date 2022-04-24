@@ -11,6 +11,11 @@
           <strong>•</strong> Tags
         </router-link>
       </li>
+      <li>
+        <router-link :to="'statistics'" class="node">
+          <strong>•</strong> Statistics
+        </router-link>
+      </li>
     </ul>
   </div>
 </template>

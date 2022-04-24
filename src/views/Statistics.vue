@@ -6,7 +6,7 @@
         <the-navigation />
       </div>
       <div class="w-3/4">
-        <the-tags />
+        <the-statistics />
       </div>
     </the-grid>
   </div>
@@ -20,10 +20,10 @@ import { useFileStore } from "@/composables/file-store";
 import { useRouter } from "vue-router";
 import { watchImmediate } from "@/utils/vue-utils";
 import TheNavigation from "@/components/TheNavigation.vue";
-import TheTags from "@/components/TheTags.vue";
+import TheStatistics from "@/components/TheStatistics.vue";
 
 export default defineComponent({
-  components: { TheTags, TheNavigation, TheGrid, TheStatusBar },
+  components: { TheStatistics, TheNavigation, TheGrid, TheStatusBar },
 
   setup() {
     const fileStore = useFileStore();

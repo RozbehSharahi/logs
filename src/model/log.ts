@@ -41,6 +41,10 @@ export class Log {
     return this.date;
   }
 
+  getMonthString(): string {
+    return `${this.date.getFullYear()}/${this.date.getMonth() + 1}`;
+  }
+
   getTags(): number[] {
     return this.tags;
   }

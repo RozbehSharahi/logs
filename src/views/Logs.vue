@@ -1,11 +1,11 @@
 <template>
   <div v-if="isDatabaseRegistered">
+    <the-status-bar class="mb-30" />
     <the-grid :spacing-x="50">
       <div class="w-1/4">
         <the-navigation />
       </div>
       <div class="w-3/4">
-        <the-status-bar class="mb-30" />
         <the-logs />
       </div>
     </the-grid>
