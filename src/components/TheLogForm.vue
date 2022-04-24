@@ -57,7 +57,6 @@ export default defineComponent({
     onMounted(() => {
       shortPacker.push([
         new ShortCut({
-          label: "Commit",
           key: "Escape",
           action: () => emit("close"),
         }),

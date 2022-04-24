@@ -2,9 +2,10 @@
   <div class="logs">
     <div class="mb-30">
       <the-button
+        class="short-cutter-a"
         type="primary"
         label="Add a log (a)"
-        @click="methods.addLog"
+        @click="addLog"
       />
     </div>
     <the-up-down-navigation
@@ -33,17 +34,13 @@
             </div>
           </div>
           <div class="w-1/4 text-right">
-            <the-button
-              label="Delete"
-              size="sm"
-              @click="methods.deleteLog(log)"
-            />
+            <the-button label="Delete" size="sm" @click="deleteLog(log)" />
             <the-button
               label="Edit"
               class="button-edit"
               size="sm"
               type="primary"
-              @click="methods.editLog(log)"
+              @click="editLog(log)"
             />
           </div>
         </the-grid>
@@ -52,17 +49,10 @@
   </div>
 </template>
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  reactive,
-} from "vue";
+import { computed, defineComponent, reactive } from "vue";
 import { modalService } from "@/modals/modal-service";
 import TheButton from "@/components/TheButton.vue";
 import { Log } from "@/model/log";
-import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
 import TheTagList from "@/components/TheTagList.vue";
 import TheGrid from "@/components/TheGrid.vue";
 import TheUpDownNavigation from "@/components/TheUpDownNavigation.vue";
@@ -73,60 +63,47 @@ import { useDatabase } from "@/composables/database";
 export default defineComponent({
   components: { TheDate, TheUpDownNavigation, TheGrid, TheTagList, TheButton },
   setup() {
-    const { database, unregisterDatabase } = useFileStore();
-    const { saveAll, create, update, all } = useDatabase(database.value);
+    const { database } = useFileStore();
+    const { create, update, remove, all } = useDatabase(database.value);
 
     const services = reactive({
       modalService,
     });
 
-    const methods = {
-      save: async () => {
-        await saveAll();
-      },
-      addLog: async () => {
-        services.modalService.open({
-          component: await import("./TheLogForm.vue"),
-          listeners: {
-            async commit(log: Log) {
-              await create("log", log);
-              services.modalService.pop();
-            },
+    const addLog = async () => {
+      services.modalService.open({
+        component: await import("./TheLogForm.vue"),
+        listeners: {
+          async commit(log: Log) {
+            await create("log", log);
+            services.modalService.pop();
           },
-        });
-      },
-      editLog: async (log: Log) => {
-        services.modalService.open({
-          component: await import("./TheLogForm.vue"),
-          properties: { log },
-          listeners: {
-            async commit(editedLog: Log) {
-              await update("log", editedLog);
-              services.modalService.pop();
-            },
-          },
-        });
-      },
-      deleteLog: async (log: Log) => {
-        await database.value.delete("log", log);
-      },
+        },
+      });
     };
 
-    onMounted(() => {
-      shortPacker.push([
-        new ShortCut({ key: "s", action: () => methods.save() }),
-        new ShortCut({ key: "a", action: () => methods.addLog() }),
-        new ShortCut({ key: "Escape", action: () => unregisterDatabase() }),
-      ]);
-    });
+    const editLog = async (log: Log) => {
+      services.modalService.open({
+        component: await import("./TheLogForm.vue"),
+        properties: { log },
+        listeners: {
+          async commit(editedLog: Log) {
+            await update("log", editedLog);
+            services.modalService.pop();
+          },
+        },
+      });
+    };
 
-    onUnmounted(() => {
-      shortPacker.pop();
-    });
+    const deleteLog = async (log: Log) => {
+      await remove("log", log);
+    };
 
     return {
       services,
-      methods,
+      addLog,
+      editLog,
+      deleteLog,
       logs: computed((): Log[] => all("log")),
     };
   },

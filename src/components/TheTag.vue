@@ -12,9 +12,6 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
-    return {};
-  },
 });
 </script>
 <style lang="scss" scoped>

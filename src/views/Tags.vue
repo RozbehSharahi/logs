@@ -6,7 +6,7 @@
       </div>
       <div class="w-3/4">
         <the-status-bar class="mb-30" />
-        <the-logs />
+        <the-tags />
       </div>
     </the-grid>
   </div>
@@ -14,16 +14,16 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import TheLogs from "@/components/TheLogs.vue";
 import TheStatusBar from "@/components/TheStatusBar.vue";
 import TheGrid from "@/components/TheGrid.vue";
 import { useFileStore } from "@/composables/file-store";
 import { useRouter } from "vue-router";
 import { watchImmediate } from "@/utils/vue-utils";
 import TheNavigation from "@/components/TheNavigation.vue";
+import TheTags from "@/components/TheTags.vue";
 
 export default defineComponent({
-  components: { TheNavigation, TheGrid, TheStatusBar, TheLogs },
+  components: { TheTags, TheNavigation, TheGrid, TheStatusBar },
 
   setup() {
     const fileStore = useFileStore();
@@ -39,8 +39,3 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss" scoped>
-.the-database-picker {
-  max-width: 600px;
-}
-</style>

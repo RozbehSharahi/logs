@@ -10,6 +10,7 @@ interface IComposableDatabase {
   get: (table: string, identifier: number) => Entity;
   create: (table: string, row: Row) => Database;
   update: (table: string, row: Entity) => Database;
+  remove: (table: string, row: Entity) => Database;
 }
 
 export function useDatabase(database: Database): IComposableDatabase {
@@ -31,6 +32,9 @@ export function useDatabase(database: Database): IComposableDatabase {
     },
     update: (table: string, entity: Entity) => {
       return db.value.update(table, entity);
+    },
+    remove: (table: string, entity: Entity) => {
+      return db.value.delete(table, entity);
     },
     saveAll: () => {
       return db.value.saveAll();

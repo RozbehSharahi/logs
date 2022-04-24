@@ -1,6 +1,7 @@
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { fileStore } from "@rozbehsharahi/file-store";
 import { Database } from "@rozbehsharahi/file-store/database";
+import { Normalizer } from "@rozbehsharahi/file-store/types";
 
 interface IFileStoreComposable {
   service: Ref<typeof fileStore>;
@@ -12,6 +13,10 @@ interface IFileStoreComposable {
   pickDatabase: () => Promise<void>;
   pickDatabaseFromSession: () => Promise<void>;
   unregisterDatabase: () => Promise<void>;
+  registerNormalizer: (
+    table: string,
+    normalizer: Normalizer
+  ) => typeof fileStore;
 }
 
 export function useFileStore(name = "default"): IFileStoreComposable {
@@ -44,6 +49,9 @@ export function useFileStore(name = "default"): IFileStoreComposable {
     },
     unregisterDatabase: () => {
       return service.value.unregisterDatabase(name);
+    },
+    registerNormalizer: (table: string, normalizer: Normalizer) => {
+      return service.value.registerSerializer(table, normalizer, name);
     },
   };
 }

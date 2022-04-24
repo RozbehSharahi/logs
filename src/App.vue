@@ -5,25 +5,39 @@
   <modals />
 </template>
 
-<script>
+<script lang="ts">
 import Modals from "@/modals/component/Modals.vue";
-import { fileStore } from "@rozbehsharahi/file-store";
 import { Log } from "@/model/log";
 import { Tag } from "@/model/tag";
+import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
+import { useDom } from "@/composables/dom";
+import { useFileStore } from "@/composables/file-store";
 
 export default {
   components: { Modals },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  data() {
-    return {
-      fileStore,
-    };
-  },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  mounted() {
-    fileStore
-      .registerSerializer("log", Log.getNormalizer())
-      .registerSerializer("tag", Tag.getNormalizer());
+  setup(): Record<string, unknown> {
+    const { findOneHtmlElementOrNull: element } = useDom();
+    const { registerNormalizer } = useFileStore();
+
+    shortPacker.push([
+      new ShortCut({
+        key: "a",
+        action: () => element(".short-cutter-a")?.click(),
+      }),
+      new ShortCut({
+        key: "s",
+        action: () => element(".short-cutter-s")?.click(),
+      }),
+      new ShortCut({
+        key: "Escape",
+        action: () => element(".short-cutter-escape")?.click(),
+      }),
+    ]);
+
+    registerNormalizer("log", Log.getNormalizer());
+    registerNormalizer("tag", Tag.getNormalizer());
+
+    return {};
   },
 };
 </script>

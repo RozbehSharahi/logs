@@ -9,11 +9,13 @@
       </div>
       <div class="w-1/4 text-right">
         <the-button
+          class="short-cutter-escape"
           label="Logout (Escape)"
           size="sm"
           @click="unregisterDatabase()"
         />
         <the-button
+          class="short-cutter-s"
           v-if="isDirty"
           size="sm"
           type="danger"

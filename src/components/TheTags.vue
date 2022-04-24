@@ -1,7 +1,12 @@
 <template>
-  <div>
+  <div class="tags">
     <div class="mb-30">
-      <the-button label="Add tag" @click="methods.addTag" />
+      <the-button
+        class="button-add-tag short-cutter-a"
+        label="Add tag (a)"
+        @click="methods.addTag"
+        type="primary"
+      />
     </div>
     <div v-for="tag in tags" :key="tag.getLabel()" class="tag">
       <span>{{ tag.getLabel() }}</span>
@@ -54,12 +59,14 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 @import "src/assets/scss/variables";
-.tag {
-  padding: 0.3em 2em;
-  display: inline-block;
-  background-color: transparentize($primary, 0.9);
-  margin-right: 0.5em;
-  margin-bottom: 0.5em;
-  font-size: 0.8em;
+.tags {
+  .tag {
+    padding: 1em;
+    border-bottom: 1px solid $gray-very-light;
+
+    &:nth-child(odd) {
+      background-color: $gray-lightest;
+    }
+  }
 }
 </style>
