@@ -9,10 +9,19 @@
       />
     </div>
     <div v-for="tag in tags" :key="tag.getLabel()" class="tag">
-      <span>{{ tag.getLabel() }}</span>
-      <span @click="methods.deleteTag(tag)" class="ml-5 cursor-pointer">
-        (x)
-      </span>
+      <the-grid>
+        <div class="w-3/4">
+          <span>{{ tag.getLabel() }}</span>
+        </div>
+        <div class="w-1/4 text-right">
+          <the-button
+            @click="methods.deleteTag(tag)"
+            class="ml-5"
+            type="xs"
+            label="Delete"
+          />
+        </div>
+      </the-grid>
     </div>
   </div>
 </template>
@@ -22,9 +31,10 @@ import { computed, defineComponent, reactive } from "vue";
 import { fileStore } from "@rozbehsharahi/file-store";
 import { Tag } from "@/model/tag";
 import { modalService } from "@/modals/modal-service";
+import TheGrid from "@/components/TheGrid.vue";
 
 export default defineComponent({
-  components: { TheButton },
+  components: { TheGrid, TheButton },
   setup() {
     const services = reactive({
       modalService,

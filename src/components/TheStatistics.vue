@@ -14,7 +14,9 @@
           :key="monthHour.name"
         >
           <td>{{ year }} {{ monthHour.date.toString().substring(4, 7) }}</td>
-          <td>{{ monthHour.hours }}</td>
+          <td :class="{ 'font-bold': monthHour.hours > 0 }">
+            {{ monthHour.hours }}
+          </td>
         </tr>
       </tbody>
     </the-table>

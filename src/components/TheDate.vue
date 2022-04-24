@@ -13,7 +13,10 @@ export default defineComponent({
   setup(props) {
     return {
       dateString: computed(() => {
-        return props.date.toDateString().substr(4, 11);
+        let day = props.date.getDate();
+        let month = props.date.getMonth() + 1;
+        let year = props.date.getFullYear();
+        return `${day}.${month}.${year}`;
       }),
     };
   },

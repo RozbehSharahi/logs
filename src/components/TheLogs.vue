@@ -65,10 +65,15 @@ export default defineComponent({
   setup() {
     const { database } = useFileStore();
     const { create, update, remove, all } = useDatabase(database.value);
-
     const services = reactive({
       modalService,
     });
+
+    let logs = computed(() =>
+      (all("log") as Log[]).sort(
+        (a, b) => b.getDate().getTime() - a.getDate().getTime()
+      )
+    );
 
     const addLog = async () => {
       services.modalService.open({
@@ -101,10 +106,10 @@ export default defineComponent({
 
     return {
       services,
+      logs,
       addLog,
       editLog,
       deleteLog,
-      logs: computed((): Log[] => all("log")),
     };
   },
 });
