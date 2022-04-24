@@ -57,20 +57,18 @@ import TheTagList from "@/components/TheTagList.vue";
 import TheGrid from "@/components/TheGrid.vue";
 import TheUpDownNavigation from "@/components/TheUpDownNavigation.vue";
 import TheDate from "@/components/TheDate.vue";
-import { useFileStore } from "@/composables/file-store";
-import { useDatabase } from "@/composables/database";
+import { useDatabase } from "@/composables/file-store-database";
 
 export default defineComponent({
   components: { TheDate, TheUpDownNavigation, TheGrid, TheTagList, TheButton },
   setup() {
-    const { database } = useFileStore();
-    const { create, update, remove, all } = useDatabase(database.value);
+    const { database: db } = useDatabase();
     const services = reactive({
       modalService,
     });
 
     let logs = computed(() =>
-      (all("log") as Log[]).sort(
+      (db.value.all("log") as Log[]).sort(
         (a, b) => b.getDate().getTime() - a.getDate().getTime()
       )
     );
@@ -80,7 +78,7 @@ export default defineComponent({
         component: await import("./TheLogForm.vue"),
         listeners: {
           async commit(log: Log) {
-            await create("log", log);
+            await db.value.create("log", log);
             services.modalService.pop();
           },
         },
@@ -93,7 +91,7 @@ export default defineComponent({
         properties: { log },
         listeners: {
           async commit(editedLog: Log) {
-            await update("log", editedLog);
+            await db.value.update("log", editedLog);
             services.modalService.pop();
           },
         },
@@ -101,7 +99,7 @@ export default defineComponent({
     };
 
     const deleteLog = async (log: Log) => {
-      await remove("log", log);
+      await db.value.delete("log", log);
     };
 
     return {

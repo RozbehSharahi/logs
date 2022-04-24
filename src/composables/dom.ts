@@ -1,5 +1,5 @@
 interface IDomComposable {
-  findOneHtmlElementOrNull(selector: string): HTMLElement | null;
+  findExactlyOneHtmlElementOrNull(selector: string): HTMLElement | null;
 }
 
 export function useDom(): IDomComposable {
@@ -15,5 +15,5 @@ export function useDom(): IDomComposable {
     if (!(element instanceof HTMLElement)) return null;
     return element;
   };
-  return { findOneHtmlElementOrNull };
+  return { findExactlyOneHtmlElementOrNull: findOneHtmlElementOrNull };
 }

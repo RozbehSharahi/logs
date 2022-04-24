@@ -4,7 +4,7 @@
       <p>You have 2 options: Pick an existing database or create a new one.</p>
       <div class="mt-10">
         <the-button
-          v-if="isLastDatabaseStored"
+          v-if="isStoredInSession"
           label="Continue session"
           @click="pickDatabaseFromSession"
           type="primary"
@@ -13,7 +13,7 @@
         <the-button
           label="Pick database"
           @click="pickDatabase"
-          :auto-focus="!isLastDatabaseStored"
+          :auto-focus="!isStoredInSession"
           type="primary"
         />
         <the-button label="Create database" @click="createDatabase" />
@@ -28,7 +28,7 @@ import Card from "@/components/TheCard.vue";
 import TheButton from "@/components/TheButton.vue";
 import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
 import { findNextTabElement, findPreviousTabElement } from "@/utils/utils";
-import { useFileStore } from "@/composables/file-store";
+import { useDatabase } from "@/composables/file-store-database";
 
 export default defineComponent({
   components: { TheButton, Card },
@@ -38,8 +38,6 @@ export default defineComponent({
     },
   },
   setup() {
-    const fileStore = useFileStore();
-
     onMounted(async () => {
       shortPacker.push([
         new ShortCut({
@@ -58,7 +56,7 @@ export default defineComponent({
     });
 
     return {
-      ...fileStore,
+      ...useDatabase(),
     };
   },
 });

@@ -12,13 +12,13 @@ import { Log } from "@/model/log";
 import { Tag } from "@/model/tag";
 import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
 import { useDom } from "@/composables/dom";
-import { useFileStore } from "@/composables/file-store";
+import { useDatabase } from "@/composables/file-store-database";
 
 export default {
   components: { Modals },
   setup(): Record<string, unknown> {
-    const { findOneHtmlElementOrNull: element } = useDom();
-    const { registerNormalizer } = useFileStore();
+    const { findExactlyOneHtmlElementOrNull: element } = useDom();
+    const { registerNormalizer } = useDatabase();
 
     shortPacker.push([
       new ShortCut({

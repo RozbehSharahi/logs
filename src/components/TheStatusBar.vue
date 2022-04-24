@@ -1,9 +1,9 @@
 <template>
-  <div class="the-status-bar" :class="{ dirty: isDirty }">
+  <div class="the-status-bar" :class="{ dirty: database.isDirty() }">
     <the-grid>
       <div class="w-3/4">
         <div class="mt-4">
-          <span v-if="!isDirty"> ✓ All todos saved </span>
+          <span v-if="!database.isDirty()"> ✓ All todos saved </span>
           <span v-else> Please save your changes </span>
         </div>
       </div>
@@ -16,11 +16,11 @@
         />
         <the-button
           class="short-cutter-s"
-          v-if="isDirty"
+          v-if="database.isDirty()"
           size="sm"
           type="danger"
           label="Save (s)"
-          @click="saveAll"
+          @click="database.saveAll()"
         />
       </div>
     </the-grid>
@@ -30,15 +30,13 @@
 import { defineComponent } from "vue";
 import TheButton from "@/components/TheButton.vue";
 import TheGrid from "@/components/TheGrid.vue";
-import { useFileStore } from "@/composables/file-store";
-import { useDatabase } from "@/composables/database";
+import { useDatabase } from "@/composables/file-store-database";
 
 export default defineComponent({
   components: { TheGrid, TheButton },
   setup() {
     return {
-      ...useFileStore(),
-      ...useDatabase(useFileStore().database.value),
+      ...useDatabase(),
     };
   },
 });

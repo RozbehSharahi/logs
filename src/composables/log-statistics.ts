@@ -1,6 +1,5 @@
-import { useDatabase } from "@/composables/database";
-import { useFileStore } from "@/composables/file-store";
 import { Log } from "@/model/log";
+import { useDatabase } from "@/composables/file-store-database";
 
 interface IComposable {
   getLogsOfMonth: (year: number, month: number) => Log[];
@@ -24,8 +23,8 @@ function sumArray(array: number[]) {
 }
 
 export function useLogStatistics(): IComposable {
-  const { all } = useDatabase(useFileStore().database.value);
-  const logs: Log[] = all("log");
+  const { database: db } = useDatabase();
+  const logs: Log[] = db.value.all("log");
 
   const getLogsOfMonth = (year: number, month: number): Log[] => {
     return logs.filter((log) => log.getDate().getMonth() === month - 1);
