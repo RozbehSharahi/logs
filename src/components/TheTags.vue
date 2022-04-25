@@ -3,7 +3,7 @@
     <div class="mb-30">
       <the-button
         class="button-add-tag short-cutter-a"
-        label="Add tag (a)"
+        label="Add a tag (a)"
         @click="methods.addTag"
         type="primary"
       />
