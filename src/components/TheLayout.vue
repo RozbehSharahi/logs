@@ -2,10 +2,10 @@
   <div v-if="isVisible">
     <the-status-bar class="mb-30" />
     <the-grid :spacing-x="50">
-      <div class="w-1/4">
+      <div class="w-full sm:w-1/4">
         <the-navigation />
       </div>
-      <div class="w-3/4">
+      <div class="w-full sm:w-3/4">
         <slot />
       </div>
     </the-grid>

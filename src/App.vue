@@ -1,6 +1,6 @@
 <!--suppress HtmlUnknownTag -->
 <template>
-  <div class="container mt-30">
+  <div class="container mt-30 px-20">
     <router-view />
   </div>
   <modals />
