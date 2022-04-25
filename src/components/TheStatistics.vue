@@ -3,6 +3,7 @@
     <the-headline label="Statistics" />
     <the-grid>
       <div class="w-1/2">
+        <the-headline label="By Month" :level="3" />
         <the-bar-chart
           class="mb-20"
           :data="{
@@ -29,6 +30,7 @@
         />
       </div>
       <div class="w-1/2">
+        <the-headline label="By Month and Tag" :level="3" />
         <the-bar-chart
           class="mb-20"
           :data="{

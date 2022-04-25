@@ -9,9 +9,13 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    level: {
+      type: Number,
+      default: 2,
+    },
   },
-  setup() {
-    const tag = computed(() => "h2");
+  setup(props) {
+    const tag = computed(() => `h${props.level}`);
     return {
       tag,
     };
@@ -21,6 +25,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 .h2 {
   font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 1em;
+}
+.h3 {
+  font-size: 1.3em;
   font-weight: bold;
   margin-bottom: 1em;
 }
