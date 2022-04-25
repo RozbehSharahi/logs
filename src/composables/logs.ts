@@ -9,9 +9,17 @@ interface IComposable {
   logsSorted: ComputedRef<Log[]>;
   logsByMonth: ComputedRef<LogsByMonth>;
   logsByTag: ComputedRef<LogsByTag>;
+  monthYears: ComputedRef<Date[]>;
+  tags: ComputedRef<Tag[]>;
   getLogsGroupedByMonth: (logs: Log[]) => LogsByMonth;
   getLogsGroupedByTag: (logs: Log[]) => LogsByTag;
   getLogsByMonth: (logs: Log[], year: number, month: number) => Log[];
+  getLogsByTagAndMonth: (
+    logs: Log[],
+    tag: Tag,
+    year: number,
+    month: number
+  ) => Log[];
 }
 
 export type LogsByMonth = {
@@ -34,6 +42,30 @@ export function useLogs(): IComposable {
   const logsSorted = computed(() => logs.value.sort(sortByDate));
   const logsByMonth = computed(() => getLogsGroupedByMonth(logsSorted.value));
   const logsByTag = computed(() => getLogsGroupedByTag(logsSorted.value));
+  const monthYears = computed(() => getMonthYears(logsSorted.value));
+  const tags = computed(() => getTags(logsSorted.value));
+
+  const getMonthYears = (logs: Log[]): Date[] => {
+    const monthYears: { [monthYear: string]: Date } = {};
+    for (const log of logs) {
+      const year = log.getDate().getFullYear();
+      const month = log.getDate().getMonth() + 1;
+      monthYears[`${year}-${month}`] = new Date(`${year}-${month}-1`);
+    }
+    return Object.values(monthYears);
+  };
+
+  const getTags = (logs: Log[]): Tag[] => {
+    const tags: { [key: number]: Tag } = {};
+    for (const log of logs) {
+      for (const tag of log.getRelations().getTags()) {
+        const identifier = tag.getIdentifier();
+        if (!identifier) continue;
+        tags[identifier] = tag;
+      }
+    }
+    return Object.values(tags);
+  };
 
   const getLogsGroupedByTag = (logs: Log[]): LogsByTag => {
     const logsMap: { [tag: string]: { tag: Tag; logs: Log[] } } = {};
@@ -83,14 +115,32 @@ export function useLogs(): IComposable {
     );
   };
 
+  const getLogsByTag = (logs: Log[], tag: Tag): Log[] => {
+    const tagIdentifier = tag.getIdentifier();
+    if (!tagIdentifier) return [];
+    return logs.filter((log) => log.getTags().includes(tagIdentifier));
+  };
+
+  const getLogsByTagAndMonth = (
+    logs: Log[],
+    tag: Tag,
+    year: number,
+    month: number
+  ): Log[] => {
+    return getLogsByTag(getLogsByMonth(logs, year, month), tag);
+  };
+
   return {
     logs,
     logsSorted,
     logsByMonth,
     logsByTag,
+    monthYears,
+    tags,
     getLogsByMonth,
     getLogsGroupedByMonth,
     getLogsGroupedByTag,
+    getLogsByTagAndMonth,
   };
 }
 

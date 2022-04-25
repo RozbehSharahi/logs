@@ -5,23 +5,23 @@
       <thead>
         <tr>
           <th>Month</th>
-          <th v-for="item in logsByTag" :key="item.tag.getIdentifier()">
-            {{ item.tag.getLabel() }}
+          <th v-for="tag in tags" :key="tag.getIdentifier()">
+            {{ tag.getLabel() }}
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in logsByMonth" :key="`${item.year}-${item.month}`">
-          <td>{{ item.year }} {{ item.monthName }}</td>
-          <td
-            v-for="itemByTag in logsByTag"
-            :key="itemByTag.tag.getIdentifier()"
-          >
+        <tr v-for="monthYear in monthYears" :key="`${monthYear}`">
+          <td>{{ monthYear.getFullYear() }}/{{ monthYear.getMonth() + 1 }}</td>
+          <td v-for="tag in tags" :key="tag.getIdentifier()">
             {{
               sum(
-                getLogsByMonth(itemByTag.logs, item.year, item.month).map((v) =>
-                  v.getHours()
-                )
+                getLogsByTagAndMonth(
+                  logs,
+                  tag,
+                  monthYear.getFullYear(),
+                  monthYear.getMonth() + 1
+                ).map((log) => log.getHours())
               )
             }}
           </td>
