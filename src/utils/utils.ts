@@ -51,3 +51,10 @@ export function monthName(month: number): string {
     ][month] || "NaM"
   );
 }
+
+export function colorByIndex(index: number): string {
+  return (
+    ["#2062a2", "#8d1919", "#c9a712", "#18c912", "#868628", "#c2199a"][index] ||
+    "#000"
+  );
+}
