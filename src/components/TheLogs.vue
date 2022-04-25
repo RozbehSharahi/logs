@@ -13,37 +13,49 @@
       :selector="'.log .button-edit'"
       :enabled="!services.modalService.getModals().length"
     >
-      <div v-for="log in logsSorted" :key="log.getIdentifier()" class="log">
-        <the-grid>
-          <div class="w-3/4">
-            <div>
-              <span><the-date :date="log.getDate()" /> </span>
-              <strong>{{ log.getContent() }}</strong>
-              <span> / {{ log.getHours() }}h </span>
-            </div>
-            <div class="text-0.8">
-              <the-tag-list
-                class="inline-block mt-10"
-                :tags="
-                  log
-                    .getRelations()
-                    .getTags()
-                    .map((v) => v.getLabel())
-                "
-              />
-            </div>
+      <div
+        v-for="item in logsByMonth.slice().reverse()"
+        :key="`${item.year}-${item.month}`"
+      >
+        <the-headline :label="`${item.year} ${item.monthName}`" />
+        <div class="mb-20">
+          <div
+            v-for="log in item.logs.slice().reverse()"
+            :key="log.getIdentifier()"
+            class="log"
+          >
+            <the-grid>
+              <div class="w-3/4">
+                <div>
+                  <span><the-date :date="log.getDate()" /> </span>
+                  <strong>{{ log.getContent() }}</strong>
+                  <span> / {{ log.getHours() }}h </span>
+                </div>
+                <div class="text-0.8">
+                  <the-tag-list
+                    class="inline-block mt-10"
+                    :tags="
+                      log
+                        .getRelations()
+                        .getTags()
+                        .map((v) => v.getLabel())
+                    "
+                  />
+                </div>
+              </div>
+              <div class="w-1/4 text-right">
+                <the-button label="Delete" size="xs" @click="deleteLog(log)" />
+                <the-button
+                  label="Edit"
+                  class="button-edit"
+                  size="xs"
+                  type="primary"
+                  @click="editLog(log)"
+                />
+              </div>
+            </the-grid>
           </div>
-          <div class="w-1/4 text-right">
-            <the-button label="Delete" size="xs" @click="deleteLog(log)" />
-            <the-button
-              label="Edit"
-              class="button-edit"
-              size="xs"
-              type="primary"
-              @click="editLog(log)"
-            />
-          </div>
-        </the-grid>
+        </div>
       </div>
     </the-up-down-navigation>
   </div>
@@ -59,12 +71,20 @@ import TheUpDownNavigation from "@/components/TheUpDownNavigation.vue";
 import TheDate from "@/components/TheDate.vue";
 import { useDatabase } from "@/composables/file-store-database";
 import { useLogs } from "@/composables/logs";
+import TheHeadline from "@/components/TheHeadline.vue";
 
 export default defineComponent({
-  components: { TheDate, TheUpDownNavigation, TheGrid, TheTagList, TheButton },
+  components: {
+    TheHeadline,
+    TheDate,
+    TheUpDownNavigation,
+    TheGrid,
+    TheTagList,
+    TheButton,
+  },
   setup() {
     const { database: db } = useDatabase();
-    const { logsSorted } = useLogs();
+    const { logsByMonth } = useLogs();
     const services = reactive({
       modalService,
     });
@@ -100,7 +120,7 @@ export default defineComponent({
 
     return {
       services,
-      logsSorted,
+      logsByMonth,
       addLog,
       editLog,
       deleteLog,

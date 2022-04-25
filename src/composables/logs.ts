@@ -34,7 +34,7 @@ export function useLogs(): IComposable {
   const logsByMonth = computed(() => {
     const logsByMonth: LogsByMonth = [];
     const logsMap: { [year: string]: { [month: string]: Log[] } } = {};
-    for (const log of logs.value) {
+    for (const log of logsSorted.value) {
       const year = log.getDate().getFullYear();
       const month = log.getDate().getMonth() + 1;
       if (!logsMap[year]) logsMap[year] = {};
@@ -52,7 +52,10 @@ export function useLogs(): IComposable {
         });
       }
     }
-    return logsByMonth;
+    return logsByMonth.sort(
+      (a, b) =>
+        parseInt(`${b.year}${b.month}`) - parseInt(`${a.year}${a.month}`)
+    );
   });
 
   const getLogsOfMonth = (year: number, month: number): Log[] => {
