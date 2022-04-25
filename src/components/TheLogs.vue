@@ -17,7 +17,9 @@
         v-for="item in logsByMonth.slice().reverse()"
         :key="`${item.year}-${item.month}`"
       >
-        <the-headline :label="`${item.year} ${item.monthName}`" />
+        <the-headline
+          :label="`${item.year} ${item.monthName} (${item.hours} hours)`"
+        />
         <div class="mb-20">
           <div
             v-for="log in item.logs.slice().reverse()"
@@ -84,7 +86,7 @@ export default defineComponent({
   },
   setup() {
     const { database: db } = useDatabase();
-    const { logsByMonth } = useLogs();
+    const { logsByMonth, getLogsGroupedByMonth, logsSorted } = useLogs();
     const services = reactive({
       modalService,
     });
@@ -120,7 +122,9 @@ export default defineComponent({
 
     return {
       services,
+      logsSorted,
       logsByMonth,
+      getLogsGroupedByMonth,
       addLog,
       editLog,
       deleteLog,
@@ -130,6 +134,7 @@ export default defineComponent({
 </script>
 <style scoped lang="scss">
 @import "src/assets/scss/variables";
+
 .logs {
   .log {
     padding: 0.5em;

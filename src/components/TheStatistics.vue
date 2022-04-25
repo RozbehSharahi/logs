@@ -5,14 +5,25 @@
       <thead>
         <tr>
           <th>Month</th>
-          <th>Hours</th>
+          <th v-for="item in logsByTag" :key="item.tag.getIdentifier()">
+            {{ item.tag.getLabel() }}
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in logsByMonth" :key="`${item.year}-${item.month}`">
           <td>{{ item.year }} {{ item.monthName }}</td>
-          <td :class="{ 'font-bold': true }">
-            {{ item.hours }}
+          <td
+            v-for="itemByTag in logsByTag"
+            :key="itemByTag.tag.getIdentifier()"
+          >
+            {{
+              sum(
+                getLogsByMonth(itemByTag.logs, item.year, item.month).map((v) =>
+                  v.getHours()
+                )
+              )
+            }}
           </td>
         </tr>
       </tbody>
@@ -24,12 +35,14 @@ import { computed, defineComponent } from "vue";
 import { useLogs } from "@/composables/logs";
 import TheHeadline from "@/components/TheHeadline.vue";
 import TheTable from "@/components/TheTable.vue";
+import { sum } from "@/utils/utils";
 export default defineComponent({
   components: { TheTable, TheHeadline },
   setup() {
     const year = computed(() => new Date().getFullYear());
     return {
       year,
+      sum,
       ...useLogs(),
     };
   },
