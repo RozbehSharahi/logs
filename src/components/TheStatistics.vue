@@ -9,13 +9,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="monthHour in getMonthHoursOfYear(year)"
-          :key="monthHour.name"
-        >
-          <td>{{ year }} {{ monthHour.date.toString().substring(4, 7) }}</td>
-          <td :class="{ 'font-bold': monthHour.hours > 0 }">
-            {{ monthHour.hours }}
+        <tr v-for="item in logsByMonth" :key="`${item.year}-${item.month}`">
+          <td>{{ item.year }} {{ item.monthName }}</td>
+          <td :class="{ 'font-bold': true }">
+            {{ item.hours }}
           </td>
         </tr>
       </tbody>
@@ -24,7 +21,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-import { useLogStatistics } from "@/composables/log-statistics";
+import { useLogs } from "@/composables/logs";
 import TheHeadline from "@/components/TheHeadline.vue";
 import TheTable from "@/components/TheTable.vue";
 export default defineComponent({
@@ -33,7 +30,7 @@ export default defineComponent({
     const year = computed(() => new Date().getFullYear());
     return {
       year,
-      ...useLogStatistics(),
+      ...useLogs(),
     };
   },
 });

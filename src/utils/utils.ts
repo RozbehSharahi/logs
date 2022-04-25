@@ -23,3 +23,31 @@ export function findPreviousTabElement(
   const index = list.indexOf(el);
   return list[index + 1] || list[0];
 }
+
+export function sum(array: number[]): number {
+  let sum = 0;
+  array.forEach((item) => {
+    sum += item;
+  });
+  return sum;
+}
+
+export function monthName(month: number): string {
+  return (
+    [
+      "NaM",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ][month] || "NaM"
+  );
+}

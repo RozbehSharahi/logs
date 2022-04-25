@@ -13,7 +13,7 @@
       :selector="'.log .button-edit'"
       :enabled="!services.modalService.getModals().length"
     >
-      <div v-for="log in logs" :key="log.getIdentifier()" class="log">
+      <div v-for="log in logsSorted" :key="log.getIdentifier()" class="log">
         <the-grid>
           <div class="w-3/4">
             <div>
@@ -49,7 +49,7 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, reactive } from "vue";
+import { defineComponent, reactive } from "vue";
 import { modalService } from "@/modals/modal-service";
 import TheButton from "@/components/TheButton.vue";
 import { Log } from "@/model/log";
@@ -58,20 +58,16 @@ import TheGrid from "@/components/TheGrid.vue";
 import TheUpDownNavigation from "@/components/TheUpDownNavigation.vue";
 import TheDate from "@/components/TheDate.vue";
 import { useDatabase } from "@/composables/file-store-database";
+import { useLogs } from "@/composables/logs";
 
 export default defineComponent({
   components: { TheDate, TheUpDownNavigation, TheGrid, TheTagList, TheButton },
   setup() {
     const { database: db } = useDatabase();
+    const { logsSorted } = useLogs();
     const services = reactive({
       modalService,
     });
-
-    let logs = computed(() =>
-      (db.value.all("log") as Log[]).sort(
-        (a, b) => b.getDate().getTime() - a.getDate().getTime()
-      )
-    );
 
     const addLog = async () => {
       services.modalService.open({
@@ -104,7 +100,7 @@ export default defineComponent({
 
     return {
       services,
-      logs,
+      logsSorted,
       addLog,
       editLog,
       deleteLog,

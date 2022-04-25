@@ -1,5 +1,10 @@
 # logs
 
+## Todo
+
+- monthly hours by tag
+- charts
+
 ## Know issues
 
 - should use index for arrow navigation !
