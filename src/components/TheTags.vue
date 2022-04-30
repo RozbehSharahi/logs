@@ -8,21 +8,23 @@
         type="primary"
       />
     </div>
-    <div v-for="tag in tags" :key="tag.getLabel()" class="tag">
-      <the-grid>
-        <div class="w-3/4">
-          <span>{{ tag.getLabel() }}</span>
-        </div>
-        <div class="w-1/4 text-right">
-          <the-button
-            @click="methods.deleteTag(tag)"
-            class="ml-5"
-            type="xs"
-            label="Delete"
-          />
-        </div>
-      </the-grid>
-    </div>
+    <the-grid>
+      <div v-for="tag in tags" :key="tag.getLabel()" class="w-1/3">
+        <the-grid class="tag">
+          <div class="w-3/4">
+            <span>{{ tag.getLabel() }}</span>
+          </div>
+          <div class="w-1/4 text-right">
+            <the-button
+              @click="methods.deleteTag(tag)"
+              class="ml-5"
+              type="xs"
+              label="Delete"
+            />
+          </div>
+        </the-grid>
+      </div>
+    </the-grid>
   </div>
 </template>
 <script lang="ts">
@@ -69,14 +71,13 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 @import "src/assets/scss/variables";
+
 .tags {
   .tag {
     padding: 1em;
     border-bottom: 1px solid $gray-very-light;
-
-    &:nth-child(odd) {
-      background-color: $gray-lightest;
-    }
+    background-color: $gray-lightest;
+    border-radius: 10px;
   }
 }
 </style>
