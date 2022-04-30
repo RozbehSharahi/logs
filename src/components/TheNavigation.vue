@@ -27,7 +27,7 @@ export default defineComponent({});
 @import "./src/assets/scss/variables";
 .the-navigation {
   border-top: 10px solid #eee;
-  padding-top: 2em;
+  padding-top: 1em;
   .node {
     display: block;
     padding: 0.5em 1em;

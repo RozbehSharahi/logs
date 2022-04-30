@@ -14,71 +14,82 @@
       :enabled="!services.modalService.getModals().length"
     >
       <div
-        v-for="item in logsByMonth.slice().reverse()"
-        :key="`${item.year}-${item.month}`"
+        v-for="month in logsByMonthReversed"
+        :key="`${month.item.getFullYear()}-${month.item.getMonth() + 1}`"
       >
-        <the-headline
-          :label="`${item.year} ${item.monthName} (${item.hours} hours)`"
-        />
+        <the-headline :label="`${month.item.getMonthAndYear()}`" :level="3" />
         <div class="mb-20">
-          <div
-            v-for="log in item.logs.slice().reverse()"
-            :key="log.getIdentifier()"
-            class="log"
+          <the-grid
+            v-for="day in getLogsGroupedByDay(month.logs)"
+            :key="day.item.getTime()"
+            class="day"
           >
-            <the-grid>
-              <div class="w-3/4">
-                <div>
-                  <span><the-date :date="log.getDate()" /> </span>
-                  <strong>{{ log.getContent() }}</strong>
-                  <span> / {{ log.getHours() }}h </span>
-                </div>
-                <div class="text-0.8">
-                  <the-tag-list
-                    class="inline-block mt-10"
-                    :tags="
-                      log
-                        .getRelations()
-                        .getTags()
-                        .map((v) => v.getLabel())
-                    "
-                  />
-                </div>
+            <div class="w-1/12 text-primary">
+              <em>{{ day.item.getDayAndMonth() }}</em>
+            </div>
+            <div class="w-11/12">
+              <div
+                v-for="log in day.logs"
+                :key="log.getIdentifier()"
+                class="log"
+              >
+                <the-grid>
+                  <div class="w-4/5">
+                    <div class="t-o-e">
+                      <span>{{ log.getHours() }}h • </span>
+                      <span>{{ log.getContent() }}</span>
+                    </div>
+                    <div class="text-0.8">
+                      <the-tag-list
+                        v-if="false"
+                        class="inline-block mt-10"
+                        :tags="
+                          log
+                            .getRelations()
+                            .getTags()
+                            .map((v) => v.getLabel())
+                        "
+                      />
+                    </div>
+                  </div>
+                  <div class="w-1/5 text-right">
+                    <the-button
+                      @click="deleteLog(log)"
+                      label="Delete"
+                      size="xs"
+                    />
+                    <the-button
+                      size="xs"
+                      class="button-edit"
+                      type="primary"
+                      @click="editLog(log)"
+                      label="Edit"
+                    />
+                  </div>
+                </the-grid>
               </div>
-              <div class="w-1/4 text-right">
-                <the-button label="Delete" size="xs" @click="deleteLog(log)" />
-                <the-button
-                  label="Edit"
-                  class="button-edit"
-                  size="xs"
-                  type="primary"
-                  @click="editLog(log)"
-                />
-              </div>
-            </the-grid>
-          </div>
+            </div>
+          </the-grid>
         </div>
       </div>
     </the-up-down-navigation>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { computed, defineComponent, reactive } from "vue";
 import { modalService } from "@/modals/modal-service";
 import TheButton from "@/components/TheButton.vue";
 import { Log } from "@/model/log";
 import TheTagList from "@/components/TheTagList.vue";
 import TheGrid from "@/components/TheGrid.vue";
 import TheUpDownNavigation from "@/components/TheUpDownNavigation.vue";
-import TheDate from "@/components/TheDate.vue";
 import { useDatabase } from "@/composables/file-store-database";
-import { useLogs } from "@/composables/logs";
+import { LogsByMonth, useLogs } from "@/composables/logs";
 import TheHeadline from "@/components/TheHeadline.vue";
 
 export default defineComponent({
   components: {
     TheHeadline,
-    TheDate,
     TheUpDownNavigation,
     TheGrid,
     TheTagList,
@@ -86,7 +97,13 @@ export default defineComponent({
   },
   setup() {
     const { database: db } = useDatabase();
-    const { logsByMonth, getLogsGroupedByMonth, logsSorted } = useLogs();
+    const { logsByMonth, getLogsGroupedByMonth, getLogsGroupedByDay } =
+      useLogs();
+
+    const logsByMonthReversed = computed(
+      (): LogsByMonth => logsByMonth.value.slice().reverse()
+    );
+
     const services = reactive({
       modalService,
     });
@@ -122,9 +139,10 @@ export default defineComponent({
 
     return {
       services,
-      logsSorted,
       logsByMonth,
+      logsByMonthReversed,
       getLogsGroupedByMonth,
+      getLogsGroupedByDay,
       addLog,
       editLog,
       deleteLog,
@@ -136,13 +154,23 @@ export default defineComponent({
 @import "src/assets/scss/variables";
 
 .logs {
+  .day {
+    border-bottom: 1px dashed $primary;
+    margin-bottom: 1em;
+  }
   .log {
-    padding: 0.5em;
-    border-bottom: 1px solid $gray-very-light;
+    padding: 0 0 1em 0;
+    margin-bottom: 1em;
+    border-bottom: 1px dashed $gray-very-light;
 
-    &:nth-child(odd) {
-      background-color: $gray-lightest;
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
     }
+
+    //&:nth-child(odd) {
+    //  background-color: $gray-lightest;
+    //}
   }
 }
 </style>

@@ -26,11 +26,11 @@ export default defineComponent({
 .h2 {
   font-size: 1.5em;
   font-weight: bold;
-  margin-bottom: 1em;
+  margin-bottom: 2em;
 }
 .h3 {
   font-size: 1.3em;
   font-weight: bold;
-  margin-bottom: 1em;
+  margin-bottom: 2em;
 }
 </style>

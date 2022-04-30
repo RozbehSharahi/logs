@@ -13,6 +13,7 @@ import { Tag } from "@/model/tag";
 import { ShortCut, shortPacker } from "@rozbehsharahi/shortcuts";
 import { useDom } from "@/composables/dom";
 import { useDatabase } from "@/composables/file-store-database";
+import "@/prototypes/date";
 
 export default {
   components: { Modals },

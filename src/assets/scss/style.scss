@@ -6,10 +6,25 @@
   color: $gray-dark;
 }
 
+html, body {
+  height: 101%;
+}
+
 body {
   font-size: 14px;
 
   p {
     margin-bottom: 2em;
   }
+}
+
+.t-o-e {
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-primary {
+  color: $primary;
 }

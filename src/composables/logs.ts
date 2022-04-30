@@ -1,7 +1,6 @@
 import { Log } from "@/model/log";
 import { useDatabase } from "@/composables/file-store-database";
 import { computed, ComputedRef } from "vue";
-import { monthName, sum } from "@/utils/utils";
 import { Tag } from "@/model/tag";
 
 interface IComposable {
@@ -11,6 +10,7 @@ interface IComposable {
   logsByTag: ComputedRef<LogsByTag>;
   monthYears: ComputedRef<Date[]>;
   tags: ComputedRef<Tag[]>;
+  getLogsGroupedByDay: (logs: Log[]) => LogsByDay;
   getLogsGroupedByMonth: (logs: Log[]) => LogsByMonth;
   getLogsGroupedByTag: (logs: Log[]) => LogsByTag;
   getLogsByMonth: (logs: Log[], year: number, month: number) => Log[];
@@ -22,11 +22,13 @@ interface IComposable {
   ) => Log[];
 }
 
+export type LogsByDay = {
+  item: Date;
+  logs: Log[];
+}[];
+
 export type LogsByMonth = {
-  year: number;
-  month: number;
-  monthName: string;
-  hours: number;
+  item: Date;
   logs: Log[];
 }[];
 
@@ -81,30 +83,43 @@ export function useLogs(): IComposable {
   };
 
   const getLogsGroupedByMonth = (logs: Log[]): LogsByMonth => {
-    const logsByMonth: LogsByMonth = [];
-    const logsMap: { [year: string]: { [month: string]: Log[] } } = {};
-    for (const log of logs) {
+    return group(logs, (log) => {
       const year = log.getDate().getFullYear();
-      const month = log.getDate().getMonth() + 1;
-      if (!logsMap[year]) logsMap[year] = {};
-      if (!logsMap[year][month]) logsMap[year][month] = [];
-      logsMap[year][month].push(log);
+      const month = log.getDate().getMonth();
+      return {
+        key: `${year}/${month}`,
+        item: new Date(year, month, 1, 1, 0, 0),
+      };
+    });
+  };
+
+  const getLogsGroupedByDay = (logs: Log[]) => {
+    return group(logs, (log) => {
+      const year = log.getDate().getFullYear();
+      const month = log.getDate().getMonth();
+      const day = log.getDate().getDate();
+      return {
+        key: `${year}/${month}/${day}`,
+        item: new Date(year, month, day),
+      };
+    });
+  };
+
+  const group = (
+    logs: Log[],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getGroup: (log: Log) => { key: string; item: any }
+  ) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const groups: { [key: string]: { item: any; logs: Log[] } } = {};
+    for (const log of logs) {
+      const group = getGroup(log);
+      groups[group.key] = {
+        item: group.item,
+        logs: groups[group.key] ? [...groups[group.key].logs, log] : [log],
+      };
     }
-    for (const year in logsMap) {
-      for (const month in logsMap[year]) {
-        logsByMonth.push({
-          year: parseInt(year),
-          month: parseInt(month),
-          monthName: monthName(parseInt(month)),
-          hours: sum(logsMap[year][month].map((i) => i.getHours())),
-          logs: logsMap[year][month],
-        });
-      }
-    }
-    return logsByMonth.sort(
-      (a, b) =>
-        parseInt(`${a.year}${a.month}`) - parseInt(`${b.year}${b.month}`)
-    );
+    return Object.values(groups);
   };
 
   const getLogsByMonth = (logs: Log[], year: number, month: number): Log[] => {
@@ -138,6 +153,7 @@ export function useLogs(): IComposable {
     monthYears,
     tags,
     getLogsByMonth,
+    getLogsGroupedByDay,
     getLogsGroupedByMonth,
     getLogsGroupedByTag,
     getLogsByTagAndMonth,
