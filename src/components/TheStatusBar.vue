@@ -3,7 +3,9 @@
     <the-grid>
       <div class="w-3/4">
         <div class="mt-4">
-          <span v-if="!database.isDirty()"> ✓ All todos saved </span>
+          <span v-if="!database.isDirty()" class="text-primary">
+            ✓ All todos saved
+          </span>
           <span v-else> Please save your changes </span>
         </div>
       </div>

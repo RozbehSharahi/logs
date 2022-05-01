@@ -23,6 +23,13 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
+.h2,
+.h3,
+.h4,
+.h5 {
+  font-family: serif;
+}
+
 .h2 {
   font-size: 1.5em;
   font-weight: bold;

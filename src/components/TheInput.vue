@@ -54,6 +54,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
+@import "./../assets/scss/variables";
 .the-input {
   position: relative;
   margin-bottom: 2em;
@@ -62,7 +63,7 @@ export default defineComponent({
     position: absolute;
     top: 0;
     left: 0;
-    background: #000;
+    background: black;
     color: #fff;
     font-size: 0.8em;
     padding: 0.3em 1em;
